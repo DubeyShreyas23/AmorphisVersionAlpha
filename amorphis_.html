@@ -2756,7 +2756,7 @@ canvas { outline: none; }
         <span>LATTICE STATE</span>
         <span class="phase-tag" id="crystalPhaseTag">MARTENSITE · MONOCLINIC</span>
         <span style="flex:1"></span>
-        <span>SCROLL TO ASSEMBLE</span>
+        <span id="crystalScrollHint" style="transition:opacity .4s">SCROLL TO ASSEMBLE ↓</span>
       </div>
     </div>
   </div>
@@ -5553,23 +5553,34 @@ function initCrystalLogo() {
   let progress = 0;
   let targetProgress = 0;
   let morphProgress = 0;
-  const phaseTag = document.getElementById('crystalPhaseTag');
+  const phaseTag    = document.getElementById('crystalPhaseTag');
+  const scrollHint  = document.getElementById('crystalScrollHint');
 
   function updateScroll() {
     if (!stage) return;
     const rect = stage.getBoundingClientRect();
-    const visible = clamp(1 - rect.top / window.innerHeight, 0, 1);
-    targetProgress = clamp(visible * 1.5, 0, 1);
+    const vh   = window.innerHeight;
+    // 0 when section just enters from below; 1 when section centre reaches viewport centre.
+    // Spread over ~(rect.height/2 + vh/2) px of scroll travel — feels deliberate.
+    const scrollEntry    = vh - rect.top;                          // increases as you scroll down
+    const assembleWindow = rect.height * 0.5 + vh * 0.5;          // distance to complete assembly
+    targetProgress = clamp(scrollEntry / assembleWindow, 0, 1);
   }
   window.addEventListener('scroll', updateScroll, { passive: true });
-  updateScroll();
+  updateScroll();   // seed initial value (stays 0 if section is below fold)
 
-  /* Morph cycle: every 5 sec swap between hex and lattice */
+  /* Morph cycle: start only once assembled, then swap every 5 s */
   let morphTarget = 0;
-  setInterval(() => {
-    morphTarget = morphTarget === 0 ? 1 : 0;
-    if (phaseTag) phaseTag.textContent = morphTarget === 0 ? 'MARTENSITE · MONOCLINIC' : 'AUSTENITE · CUBIC';
-  }, 5000);
+  let morphStarted = false;
+  function maybeStartMorph() {
+    if (morphStarted || progress < 0.92) return;
+    morphStarted = true;
+    if (scrollHint) scrollHint.style.opacity = '0';
+    setInterval(() => {
+      morphTarget = morphTarget === 0 ? 1 : 0;
+      if (phaseTag) phaseTag.textContent = morphTarget === 0 ? 'MARTENSITE · MONOCLINIC' : 'AUSTENITE · CUBIC';
+    }, 5000);
+  }
 
   let raf;
   function tick(t) {
@@ -5580,8 +5591,9 @@ function initCrystalLogo() {
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
     }
-    progress = lerp(progress, targetProgress, 0.04);
+    progress = lerp(progress, targetProgress, 0.035);
     morphProgress = lerp(morphProgress, morphTarget, 0.025);
+    maybeStartMorph();
     mat.uniforms.uTime.value = t * 0.001;
     mat.uniforms.uAssemble.value = easeOutCubic(progress);
     mat.uniforms.uMorph.value = easeInOutCubic(morphProgress);
