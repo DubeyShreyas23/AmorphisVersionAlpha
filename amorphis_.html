@@ -1255,19 +1255,17 @@ section { position: relative; z-index: 10; }
   display: flex;
   align-items: center;
   gap: 18px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
-.partner-strip-tag {
+.partner-strip-label {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.32em;
+  font-size: 11px;
+  letter-spacing: 0.42em;
   text-transform: uppercase;
   color: var(--cyan);
-  padding: 4px 10px;
-  border: 1px solid rgba(122,229,255,0.35);
-  background: rgba(122,229,255,0.06);
+  /* No chip / no border — clean section label */
 }
-.partner-strip-rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+.partner-strip-rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--cyan-glow), transparent); }
 .partner-strip-body {
   display: grid;
   grid-template-columns: 200px 1fr;
@@ -1277,31 +1275,47 @@ section { position: relative; z-index: 10; }
   z-index: 1;
 }
 @media (max-width: 700px) { .partner-strip-body { grid-template-columns: 1fr; text-align: center; } }
-.partner-logo-slot {
-  width: 100%; aspect-ratio: 1 / 1;
-  max-width: 200px; margin: 0 auto;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.02);
-  display: flex; align-items: center; justify-content: center;
-  padding: 18px;
-  position: relative;
+
+/* ─── DHRUVA SPACE LOGO BOX — CSS recreation of the official mark ─── */
+.dhruva-logo-box {
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1 / 1;
+  background: #000;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 22px;
+  margin: 0 auto;
+  text-decoration: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+  transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out);
 }
-.partner-logo-slot img { max-width: 100%; max-height: 100%; object-fit: contain; filter: brightness(1.05); }
-.partner-logo-fallback {
-  font-family: var(--font-hd);
-  font-size: 22px;
-  letter-spacing: 0.18em;
-  color: var(--cyan-soft);
-  text-align: center;
-  line-height: 1.1;
+.dhruva-logo-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(122,229,255,0.25), 0 0 32px rgba(122,229,255,0.12);
 }
-.partner-strip-name {
-  font-family: var(--font-hd);
-  font-size: 32px;
-  letter-spacing: 0.06em;
-  color: var(--white);
-  margin-bottom: 10px;
+.dhruva-word {
+  font-family: var(--font-display);   /* Space Grotesk — same geometric weight as the official mark */
+  font-weight: 900;
+  font-size: clamp(22px, 3.8vw, 34px);
+  color: #fff;
+  letter-spacing: 0.005em;
+  line-height: 1;
 }
+.dhruva-sub {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(10px, 1.4vw, 13px);
+  color: #fff;
+  letter-spacing: 0.46em;
+  padding-left: 0.46em;                /* compensate for letter-spacing on right edge */
+  line-height: 1;
+}
+
 .partner-strip-desc {
   font-size: 14px; font-weight: 300; line-height: 1.7;
   color: var(--steel); max-width: 640px; margin-bottom: 22px;
@@ -3517,17 +3531,15 @@ canvas { outline: none; }
   <!-- ═══ STRATEGIC PARTNER ═══ -->
   <div class="partner-strip" data-reveal>
     <div class="partner-strip-head">
-      <span class="partner-strip-tag">Strategic Partner</span>
+      <span class="partner-strip-label">Strategic Partner</span>
       <span class="partner-strip-rule"></span>
     </div>
     <div class="partner-strip-body">
-      <div class="partner-logo-slot" id="dhruvaLogoSlot" aria-label="Dhruva Space logo">
-        <!-- Replace src below with the Dhruva Space logo file once provided. -->
-        <img id="dhruvaLogoImg" alt="Dhruva Space" src="" onerror="this.style.display='none'; document.getElementById('dhruvaLogoFallback').style.display='inline-block';">
-        <span id="dhruvaLogoFallback" class="partner-logo-fallback">DHRUVA<br>SPACE</span>
-      </div>
+      <a href="https://dhruvaspace.com" target="_blank" rel="noopener" class="dhruva-logo-box" aria-label="Dhruva Space — Strategic Partner">
+        <span class="dhruva-word">DHRUVA</span>
+        <span class="dhruva-sub">SPACE</span>
+      </a>
       <div class="partner-strip-info">
-        <div class="partner-strip-name">Dhruva Space</div>
         <p class="partner-strip-desc">India's most credentialed private satellite company. First Indian company to integrate directly onto SpaceX Falcon 9 (August 2025), IN-SPACe authorised, and provider of the ThermoVac &amp; vibration testing infrastructure that qualifies every Amorphis Flight Model.</p>
         <div class="partner-strip-stats">
           <div class="psm-r"><span class="psm-k">PSLV launches</span><span class="psm-v">4 completed</span></div>
