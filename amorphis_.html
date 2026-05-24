@@ -22,14 +22,14 @@
    AMORPHIS — BLACK · GREY · METAL · MATTE
 ═══════════════════════════════════════════════════ */
 :root {
-  /* ── BASE DARKS ── */
-  --void:    #000000;
-  --deep:    #060708;
-  --abyss:   #0a0c0e;
-  --surface: #0f1114;
-  --glass:   #14171b;
-  --lift:    #1c1f24;
-  --border:  #262a30;
+  /* ── BASE DARKS — cool deep-space navy with cyan undertone ── */
+  --void:    #050810;          /* near-black with the faintest cyan-blue */
+  --deep:    #070b15;
+  --abyss:   #0a1020;
+  --surface: #0f1424;
+  --glass:   #141a2c;
+  --lift:    #1c2236;
+  --border:  #2a3146;
   --mid:     #3a3f47;
   --muted:   #6a7280;       /* upgraded for readability (was #444) */
   --steel:   #98a0aa;       /* upgraded for readability (was #666) */
@@ -69,12 +69,18 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
-  background: var(--void);
+  /* Cinematic radial — darker at edges so 3D scenes carry their own light at centre. */
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(122,229,255,0.06), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 80% 100%, rgba(212,155,92,0.04), transparent 70%),
+    radial-gradient(ellipse 100% 100% at 20% 50%, rgba(60,90,140,0.05), transparent 70%),
+    var(--void);
+  background-attachment: fixed;
   color: var(--white);
   font-family: var(--font-ui);
   font-size: 16px;
   overflow-x: hidden;
-  cursor: none;
+  cursor: default;
 }
 a { text-decoration: none; }
 ::selection { background: rgba(192,192,192,0.15); color: var(--pure); }
@@ -82,26 +88,15 @@ a { text-decoration: none; }
 ::-webkit-scrollbar-track { background: var(--void); }
 ::-webkit-scrollbar-thumb { background: var(--mid); }
 
-/* ─── CURSOR ──────────────────────────────────────── */
-#cur-dot {
-  position: fixed; z-index: 9999;
-  width: 6px; height: 6px;
-  background: var(--silver);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%,-50%);
-  transition: transform .08s ease;
+/* ─── CURSOR — professional system pointer, custom circle removed ──── */
+#cur-dot, #cur-ring { display: none !important; }
+a, button, [role="button"], .prod-card, .team-card, .tl-item, .tech-step,
+.cta-primary, .cta-secondary, .pf-btn, .nav-cta, .forge-ctrl-btn,
+.hdrm-replay, .conf-action, .mob-link, .pc-action, summary {
+  cursor: pointer;
 }
-#cur-ring {
-  position: fixed; z-index: 9998;
-  width: 32px; height: 32px;
-  border: 1px solid rgba(150,150,150,0.3);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%,-50%);
-  transition: all .2s cubic-bezier(.16,1,.3,1);
-}
-body.hovering #cur-ring { width: 52px; height: 52px; border-color: rgba(192,192,192,0.5); }
+input, textarea, select { cursor: text; }
+input[type="range"], input[type="checkbox"], input[type="radio"] { cursor: pointer; }
 
 /* ─── NOISE + SCANLINES ───────────────────────────── */
 body::before {
@@ -265,6 +260,79 @@ nav.solid {
   padding: 3px 10px;
   text-transform: uppercase;
 }
+/* ─── HERO LOGO + DYNAMIC SUBTITLE ──────────────────── */
+.hero-logo {
+  font-family: var(--font-hd);
+  font-size: clamp(64px, 9.2vw, 132px);
+  line-height: 0.92;
+  letter-spacing: 0.08em;
+  margin-bottom: 18px;
+  overflow: hidden;
+  position: relative;
+}
+.hero-logo .logo-mark {
+  display: inline-block;
+  background: linear-gradient(180deg, var(--pure) 0%, var(--silver) 50%, var(--chrome) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform: translateY(100%);
+  opacity: 0;
+  animation: lineReveal 1.1s cubic-bezier(.16,1,.3,1) .25s forwards;
+  filter: drop-shadow(0 0 24px rgba(122,229,255,0.15));
+}
+.hero-logo .logo-mark::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -6px;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0;
+  animation: slashIn 1.3s cubic-bezier(.16,1,.3,1) .9s forwards;
+  transform-origin: left;
+}
+@keyframes slashIn { 0% { opacity: 0; transform: scaleX(0); } 60% { opacity: 0.8; } 100% { opacity: 0.6; transform: scaleX(1); } }
+
+/* Elegant rotating subtitle — “SHAPE MEMORY ALLOYS” reveals with a sliding mask + letter-spacing breathe */
+.hero-sub {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeIn .9s ease 1.1s forwards;
+}
+.hero-sub .sub-pip {
+  width: 8px; height: 8px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 14px var(--cyan);
+  flex: 0 0 8px;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+.hero-sub .sub-text {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 32px);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  font-weight: 300;
+  color: var(--white);
+  background: linear-gradient(90deg, var(--white) 0%, var(--cyan-soft) 50%, var(--white) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmerSub 6s linear infinite;
+}
+.hero-sub .sub-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan-glow), transparent);
+}
+@keyframes shimmerSub { from { background-position: 0% center; } to { background-position: 200% center; } }
+@keyframes pulse { 0%,100% { transform: scale(1); box-shadow: 0 0 14px var(--cyan); } 50% { transform: scale(1.35); box-shadow: 0 0 22px var(--cyan); } }
+
+/* Legacy hero-h1 retained for unaffected pages */
 .hero-h1 {
   font-family: var(--font-hd);
   font-size: clamp(52px, 7.5vw, 104px);
@@ -273,15 +341,7 @@ nav.solid {
   margin-bottom: 6px;
   overflow: hidden;
 }
-.hero-h1 .line {
-  display: block;
-  transform: translateY(100%);
-  opacity: 0;
-  animation: lineReveal .9s cubic-bezier(.16,1,.3,1) forwards;
-}
-.hero-h1 .line:nth-child(1) { animation-delay: .2s; color: var(--white); }
-.hero-h1 .line:nth-child(2) { animation-delay: .35s; color: transparent; -webkit-text-stroke: 1px var(--steel); }
-.hero-h1 .line:nth-child(3) { animation-delay: .5s; color: var(--chrome); }
+.hero-h1 .line { display: block; transform: translateY(100%); opacity: 0; animation: lineReveal .9s cubic-bezier(.16,1,.3,1) forwards; }
 @keyframes lineReveal { to { transform: translateY(0); opacity: 1; } }
 
 .hero-tagline {
@@ -1164,6 +1224,97 @@ section { position: relative; z-index: 10; }
   border-bottom: 1px solid var(--border);
 }
 .team-bio { font-size: 13px; font-weight: 300; color: var(--steel); line-height: 1.7; }
+/* ─── STRATEGIC PARTNER STRIP ──────────────────────── */
+.team-grid.two-col { grid-template-columns: 1fr 1fr; }
+@media (max-width: 900px) { .team-grid.two-col { grid-template-columns: 1fr; } }
+
+.partner-strip {
+  margin: 80px 0 0;
+  padding: 36px 44px 40px;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(20,26,44,0.55), rgba(10,16,32,0.7));
+  position: relative;
+  overflow: hidden;
+}
+.partner-strip::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(180deg, var(--cyan), var(--warm));
+  opacity: 0.7;
+}
+.partner-strip::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 100% at 100% 0%, rgba(122,229,255,0.06), transparent 60%);
+}
+.partner-strip-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+.partner-strip-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  padding: 4px 10px;
+  border: 1px solid rgba(122,229,255,0.35);
+  background: rgba(122,229,255,0.06);
+}
+.partner-strip-rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+.partner-strip-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 700px) { .partner-strip-body { grid-template-columns: 1fr; text-align: center; } }
+.partner-logo-slot {
+  width: 100%; aspect-ratio: 1 / 1;
+  max-width: 200px; margin: 0 auto;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  display: flex; align-items: center; justify-content: center;
+  padding: 18px;
+  position: relative;
+}
+.partner-logo-slot img { max-width: 100%; max-height: 100%; object-fit: contain; filter: brightness(1.05); }
+.partner-logo-fallback {
+  font-family: var(--font-hd);
+  font-size: 22px;
+  letter-spacing: 0.18em;
+  color: var(--cyan-soft);
+  text-align: center;
+  line-height: 1.1;
+}
+.partner-strip-name {
+  font-family: var(--font-hd);
+  font-size: 32px;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+.partner-strip-desc {
+  font-size: 14px; font-weight: 300; line-height: 1.7;
+  color: var(--steel); max-width: 640px; margin-bottom: 22px;
+}
+.partner-strip-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 32px;
+  max-width: 580px;
+}
+@media (max-width: 480px) { .partner-strip-stats { grid-template-columns: 1fr; } }
+.psm-r { display: flex; justify-content: space-between; gap: 14px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+.psm-k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); }
+.psm-v { font-family: var(--font-mono); font-size: 12px; color: var(--cyan-soft); }
+
 .partner-card .team-role { color: var(--warm); }
 .partner-stats {
   margin-top: 20px; padding-top: 20px;
@@ -1261,8 +1412,7 @@ footer {
   .nav-links { display:none; }
   #simulator,#products,#technology,#roadmap,#team,#contact { padding:80px 24px; }
   .timeline { padding-left:120px; }
-  body { cursor:auto; }
-  #cur-dot,#cur-ring { display:none; }
+  /* mobile: cursor already system default — no overrides needed */
   .logo-readout { display:none; }
   .footer-inner { flex-direction:column; text-align:center; }
   .footer-copy { text-align:center; }
@@ -2263,7 +2413,7 @@ section::before {
 /* Prevent FOUC for 3D canvases */
 canvas { outline: none; }
 
-/* Subtle cinematic vignette on all 3D stages */
+/* Subtle cinematic vignette — lighter so 3D scenes stay fully visible */
 .hero-3d-stage::after,
 .forge-stage::after,
 .crystal-logo-stage::after,
@@ -2273,7 +2423,7 @@ canvas { outline: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%);
+  background: radial-gradient(ellipse at center, transparent 65%, rgba(0,0,0,0.25) 100%);
   z-index: 7;
   mix-blend-mode: multiply;
 }
@@ -2303,8 +2453,8 @@ canvas { outline: none; }
   width: 100%;
   height: 480px;
   background:
-    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(122,229,255,0.06) 0%, transparent 70%),
-    linear-gradient(180deg, #08090c 0%, #0a0d11 100%);
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(122,229,255,0.10) 0%, transparent 70%),
+    linear-gradient(180deg, #0a1020 0%, #060a14 100%);
   border: 1px solid var(--border);
   overflow: hidden;
   cursor: pointer;
@@ -2508,8 +2658,7 @@ canvas { outline: none; }
 </style>
 </head>
 <body>
-<div id="cur-dot"></div>
-<div id="cur-ring"></div>
+<!-- Custom cursor removed in favour of native pointer -->
 <canvas id="canvas-bg"></canvas>
 
 <!-- LOADER -->
@@ -2546,7 +2695,7 @@ canvas { outline: none; }
     <li><a href="#simulator">Material</a></li>
     <li><a href="#products">Products</a></li>
     <li><a href="#technology">Technology</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#roadmap">Deployment</a></li>
     <li><a href="#team">Team</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
   </ul>
@@ -2560,7 +2709,7 @@ canvas { outline: none; }
   <a href="#simulator" class="mob-link">Material</a>
   <a href="#products" class="mob-link">Products</a>
   <a href="#technology" class="mob-link">Technology</a>
-  <a href="#roadmap" class="mob-link">Roadmap</a>
+  <a href="#roadmap" class="mob-link">Deployment</a>
   <a href="#team" class="mob-link">Team</a>
   <div class="mob-cta-wrap"><a href="#contact" class="mob-cta">Contact Us</a></div>
 </div>
@@ -2575,11 +2724,14 @@ canvas { outline: none; }
       <div class="eyebrow-text">Amorphis Pvt Ltd · Hyderabad, India</div>
       <div class="eyebrow-badge">Est. 2025</div>
     </div>
-    <h1 class="hero-h1">
-      <span class="line">SHAPE</span>
-      <span class="line">MEMORY</span>
-      <span class="line">ACTUATORS</span>
+    <h1 class="hero-logo" aria-label="Amorphis — Shape Memory Alloys">
+      <span class="logo-mark">AMORPHIS</span>
     </h1>
+    <div class="hero-sub">
+      <span class="sub-pip" aria-hidden="true"></span>
+      <span class="sub-text">Shape Memory Alloys</span>
+      <span class="sub-line" aria-hidden="true"></span>
+    </div>
     <div class="hero-tagline">India's first space-grade SMA actuator company</div>
     <p class="hero-desc">
       <strong>Amorphis</strong> builds precision deployment mechanisms using Nitinol shape memory alloy — for satellites, defence platforms, and beyond. Zero domestic competition. ITAR-free by design.
@@ -3318,12 +3470,12 @@ canvas { outline: none; }
   </div>
 </section>
 
-<!-- ROADMAP -->
+<!-- LIVE MISSION (formerly Roadmap) — keeps the HDRM cinematic, removes the year planner -->
 <section id="roadmap">
   <div data-reveal>
-    <div class="s-tag">Technology Roadmap</div>
-    <h2 class="s-h2">TRL 3 → 9</h2>
-    <p class="s-lead">24-month milestone programme. Engineering evidence unlocks each phase — not calendar dates.</p>
+    <div class="s-tag">Live Mission</div>
+    <h2 class="s-h2">SPACE-GRADE<br>DEPLOYMENT</h2>
+    <p class="s-lead">Watch the NEXUS-HX HDRM run a real deployment sequence — orbit insertion, arming, release, full solar-panel unfurl. Two seconds, zero release shock.</p>
   </div>
 
   <!-- ═══ HDRM SPACE DEPLOYMENT — cinematic CubeSat ═══ -->
@@ -3338,70 +3490,6 @@ canvas { outline: none; }
     <button class="hdrm-replay" id="hdrmReplay">REPLAY</button>
     <div class="hdrm-phase" id="hdrmPhase">ORBIT INSERTION</div>
   </div>
-  <div class="timeline">
-    <div class="tl-spine"></div>
-    <div class="tl-spine-progress"></div>
-    <div class="tl-item" data-reveal>
-      <div class="tl-time"><div class="tl-when">NOW</div><div class="tl-period">Current</div></div>
-      <div class="tl-dot done"></div>
-      <div class="tl-trl">TRL 1 → 3 · COMPLETE</div>
-      <div class="tl-title">Lab Prototypes Working</div>
-      <ul class="tl-list">
-        <li>3× SMA HDRM lab prototypes built and demonstrated</li>
-        <li>Nitinol wire characterisation — 20+ actuation cycles logged</li>
-        <li>3kN ejector force validated in controlled lab conditions</li>
-        <li>Arduino-based control + Hall-effect sensing system operational</li>
-      </ul>
-    </div>
-    <div class="tl-item" data-reveal="1">
-      <div class="tl-time"><div class="tl-when">M 6–8</div><div class="tl-period">Month 6–8</div></div>
-      <div class="tl-dot"></div>
-      <div class="tl-trl">TRL 3 → 5 · MILESTONE GATE</div>
-      <div class="tl-title">Vibration Qualification</div>
-      <ul class="tl-list">
-        <li>3× Qualification Models to flight standard (Al 7075-T6)</li>
-        <li>QM vibration test at Dhruva Space facility — certificate issued</li>
-        <li>Thermal cycling −120°C to +120°C × 50 cycles</li>
-        <li>Customer Letters of Intent secured</li>
-      </ul>
-    </div>
-    <div class="tl-item" data-reveal="2">
-      <div class="tl-time"><div class="tl-when">M 12</div><div class="tl-period">Month 10–12</div></div>
-      <div class="tl-dot"></div>
-      <div class="tl-trl">TRL 5 → 7 · MILESTONE GATE</div>
-      <div class="tl-title">Space Flight Status</div>
-      <ul class="tl-list">
-        <li>3× Flight Models — ECSS-compliant space-qualified hardware</li>
-        <li>ThermoVac qualification at Dhruva Space testing facility</li>
-        <li>Outgassing test ECSS-Q-ST-70-02C — vacuum-clean certificate</li>
-        <li>Space flight status declared — first production orders confirmed</li>
-      </ul>
-    </div>
-    <div class="tl-item" data-reveal="3">
-      <div class="tl-time"><div class="tl-when">Y2</div><div class="tl-period">Year 2</div></div>
-      <div class="tl-dot"></div>
-      <div class="tl-trl">TRL 7 → 8 · FIRST FLIGHT</div>
-      <div class="tl-title">First Revenue · First Orbit</div>
-      <ul class="tl-list">
-        <li>First Indian satellite carrying Amorphis HDRM — launch campaign</li>
-        <li>Production units sold across multiple satellite customers</li>
-        <li>Defence product development begins — UAV fin actuator series</li>
-        <li>Indian patent + PCT international application filed</li>
-      </ul>
-    </div>
-    <div class="tl-item" data-reveal="4">
-      <div class="tl-time"><div class="tl-when">Y4+</div><div class="tl-period">Year 4–5</div></div>
-      <div class="tl-dot"></div>
-      <div class="tl-trl">TRL 8 → 9 · FULL PLATFORM</div>
-      <div class="tl-title">Alloy + Defence + Medical</div>
-      <ul class="tl-list">
-        <li>In-house Nitinol production begins — eliminating import dependency</li>
-        <li>Defence-grade actuator series launched</li>
-        <li>Medical SMA instrument development initiated</li>
-        <li>Alloy sold to other SMA manufacturers — new revenue stream</li>
-      </ul>
-    </div>
-  </div>
 </section>
 
 <!-- TEAM -->
@@ -3409,9 +3497,9 @@ canvas { outline: none; }
   <div data-reveal>
     <div class="s-tag">Founding Team</div>
     <h2 class="s-h2">BUILT BY<br>ENGINEERS</h2>
-    <p class="s-lead">Two founders who built working prototypes with their own hands. One strategic partner who opens doors no investor can.</p>
+    <p class="s-lead">Two founders who built working prototypes with their own hands.</p>
   </div>
-  <div class="team-grid">
+  <div class="team-grid two-col">
     <div class="team-card" data-reveal="1">
       <div class="team-avatar">KS</div>
       <div class="team-name">KUSHAGRA SINGH</div>
@@ -3424,16 +3512,29 @@ canvas { outline: none; }
       <div class="team-role">Co-Founder &amp; CTO</div>
       <p class="team-bio">Electronics, control systems, and embedded programming specialist. Built the Arduino-based current controller, Hall-effect sensing loop, and data logging system used for all prototype validation. Leads business development — originated the Dhruva Space strategic partnership.</p>
     </div>
-    <div class="team-card partner-card" data-reveal="3">
-      <div class="team-avatar" style="color:var(--warm);border-color:rgba(160,144,112,0.2);">DS</div>
-      <div class="team-name">DHRUVA SPACE</div>
-      <div class="team-role">Strategic Partner + Anchor Investor</div>
-      <p class="team-bio">India's most credentialed private satellite company. First Indian company to integrate directly onto SpaceX Falcon 9 (August 2025). IN-SPACe authorised. Provides ThermoVac and vibration testing infrastructure — the qualification path for Amorphis Flight Models.</p>
-      <div class="partner-stats">
-        <div class="ps-r"><span class="ps-k">PSLV launches</span><span class="ps-v">4 completed</span></div>
-        <div class="ps-r"><span class="ps-k">SpaceX Falcon 9</span><span class="ps-v">1st Indian company</span></div>
-        <div class="ps-r"><span class="ps-k">IN-SPACe status</span><span class="ps-v">Authorised</span></div>
-        <div class="ps-r"><span class="ps-k">Test facility</span><span class="ps-v">ThermoVac + Vibration</span></div>
+  </div>
+
+  <!-- ═══ STRATEGIC PARTNER ═══ -->
+  <div class="partner-strip" data-reveal>
+    <div class="partner-strip-head">
+      <span class="partner-strip-tag">Strategic Partner</span>
+      <span class="partner-strip-rule"></span>
+    </div>
+    <div class="partner-strip-body">
+      <div class="partner-logo-slot" id="dhruvaLogoSlot" aria-label="Dhruva Space logo">
+        <!-- Replace src below with the Dhruva Space logo file once provided. -->
+        <img id="dhruvaLogoImg" alt="Dhruva Space" src="" onerror="this.style.display='none'; document.getElementById('dhruvaLogoFallback').style.display='inline-block';">
+        <span id="dhruvaLogoFallback" class="partner-logo-fallback">DHRUVA<br>SPACE</span>
+      </div>
+      <div class="partner-strip-info">
+        <div class="partner-strip-name">Dhruva Space</div>
+        <p class="partner-strip-desc">India's most credentialed private satellite company. First Indian company to integrate directly onto SpaceX Falcon 9 (August 2025), IN-SPACe authorised, and provider of the ThermoVac &amp; vibration testing infrastructure that qualifies every Amorphis Flight Model.</p>
+        <div class="partner-strip-stats">
+          <div class="psm-r"><span class="psm-k">PSLV launches</span><span class="psm-v">4 completed</span></div>
+          <div class="psm-r"><span class="psm-k">SpaceX Falcon 9</span><span class="psm-v">1st Indian company</span></div>
+          <div class="psm-r"><span class="psm-k">IN-SPACe</span><span class="psm-v">Authorised</span></div>
+          <div class="psm-r"><span class="psm-k">Test facility</span><span class="psm-v">ThermoVac + Vibration</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -3524,7 +3625,7 @@ canvas { outline: none; }
     <h4 class="ft-col-head">Company</h4>
     <ul class="ft-links">
       <li><a href="#technology">Technology</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#roadmap">Deployment</a></li>
       <li><a href="#team">Team</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -3551,7 +3652,7 @@ canvas { outline: none; }
       <li><a href="#simulator">Material</a></li>
       <li><a href="#products">Products</a></li>
       <li><a href="#technology">Technology</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#roadmap">Deployment</a></li>
       <li><a href="#team">Team</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -3564,22 +3665,7 @@ canvas { outline: none; }
 </div>
 
 <script>
-/* ─── CURSOR ──────────────────────────────────────── */
-const dot = document.getElementById('cur-dot');
-const ring = document.getElementById('cur-ring');
-let mx=0, my=0, rx=0, ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-function animCursor() {
-  dot.style.left = mx+'px'; dot.style.top = my+'px';
-  rx += (mx-rx)*.14; ry += (my-ry)*.14;
-  ring.style.left = rx+'px'; ring.style.top = ry+'px';
-  requestAnimationFrame(animCursor);
-}
-animCursor();
-document.querySelectorAll('a,button,.prod-card,.team-card,.tl-item,.tech-step').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-});
+/* Custom cursor removed — system pointer is more professional and accessible. */
 
 /* ─── PARTICLE FIELD ──────────────────────────────── */
 const cv = document.getElementById('canvas-bg');
@@ -4089,16 +4175,17 @@ function hexToRgb(hex) {
   return isNaN(r) ? '150,150,150' : `${r},${g},${b}`;
 }
 
-/* ─── GLITCH EFFECT ───────────────────────────────── */
-const h1Lines = document.querySelectorAll('.hero-h1 .line');
-setInterval(() => {
-  if (Math.random() > .97) {
-    const l = h1Lines[Math.floor(Math.random()*h1Lines.length)];
-    l.style.textShadow = '2px 0 rgba(180,180,180,.4), -2px 0 rgba(100,100,100,.4)';
-    l.style.transform = `translateX(${(Math.random()-.5)*5}px)`;
-    setTimeout(() => { l.style.textShadow = ''; l.style.transform = ''; }, 80);
-  }
-}, 200);
+/* ─── GLITCH EFFECT — subtle Amorphis logo flicker ─────────────── */
+const logoMark = document.querySelector('.hero-logo .logo-mark');
+if (logoMark) {
+  setInterval(() => {
+    if (Math.random() > .985) {
+      logoMark.style.textShadow = '1px 0 rgba(122,229,255,.45), -1px 0 rgba(212,155,92,.25)';
+      logoMark.style.transform  = `translate(${(Math.random()-.5)*3}px, 0)`;
+      setTimeout(() => { logoMark.style.textShadow = ''; logoMark.style.transform = ''; }, 70);
+    }
+  }, 300);
+}
 
 /* ═══════════════════════════════════════════════════
    PHASE 1 — LOADING SCREEN
@@ -5117,12 +5204,62 @@ function initSimulatorCrystal() {
   const controls = new OrbitControls(camera, host);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
-  controls.enableZoom = false;
-  controls.enablePan = false;
-  controls.autoRotate = true;
+  controls.enableZoom   = true;           // wheel/pinch zoom now enabled
+  controls.minDistance  = 2.6;
+  controls.maxDistance  = 7.5;
+  controls.enablePan    = false;
+  controls.autoRotate   = true;
   controls.autoRotateSpeed = 0.6;
-  controls.minPolarAngle = Math.PI * 0.2;
-  controls.maxPolarAngle = Math.PI * 0.8;
+  controls.minPolarAngle = Math.PI * 0.15;
+  controls.maxPolarAngle = Math.PI * 0.85;
+
+  /* ─── INTERACTIVITY: click to toggle phase, hover to highlight atom ─── */
+  let phaseOverride = null;          // null = follow temp slider, 0 = forced martensite, 1 = forced austenite
+  let overrideAt    = 0;
+  const raycaster = new THREE.Raycaster();
+  const pointer   = new THREE.Vector2();
+  let hoveredAtom = null;
+
+  function updatePointer(e) {
+    const r = host.getBoundingClientRect();
+    pointer.x =  ((e.clientX - r.left) / r.width)  * 2 - 1;
+    pointer.y = -((e.clientY - r.top)  / r.height) * 2 + 1;
+  }
+  host.addEventListener('mousemove', (e) => {
+    updatePointer(e);
+    raycaster.setFromCamera(pointer, camera);
+    const hit = raycaster.intersectObjects(atoms, false)[0];
+    if (hit && hit.object !== hoveredAtom) {
+      if (hoveredAtom) hoveredAtom.scale.setScalar(hoveredAtom.userData.baseScale);
+      hoveredAtom = hit.object;
+      hoveredAtom.userData.baseScale = hoveredAtom.scale.x;
+      hoveredAtom.scale.setScalar(hoveredAtom.userData.baseScale * 1.45);
+      host.style.cursor = 'pointer';
+    } else if (!hit && hoveredAtom) {
+      hoveredAtom.scale.setScalar(hoveredAtom.userData.baseScale);
+      hoveredAtom = null;
+      host.style.cursor = 'grab';
+    }
+  });
+  host.addEventListener('mouseleave', () => {
+    if (hoveredAtom) { hoveredAtom.scale.setScalar(hoveredAtom.userData.baseScale); hoveredAtom = null; }
+  });
+
+  // Click anywhere on the canvas (incl. background) to flip phase
+  host.addEventListener('click', () => {
+    /* Toggle between cold (monoclinic / martensite) and hot (cubic / austenite) */
+    phaseOverride = (phaseOverride === 1) ? 0 : 1;
+    overrideAt = performance.now();
+    controls.autoRotate = false;
+    setTimeout(() => { controls.autoRotate = true; }, 4500);
+  });
+
+  // Phase-tag button beside the simulator also toggles when present
+  const externalTag = document.getElementById('crystalPhaseTag');
+  if (externalTag) {
+    externalTag.style.cursor = 'pointer';
+    externalTag.title = 'Click to flip phase';
+  }
 
   let raf;
   function tick(t) {
@@ -5134,8 +5271,15 @@ function initSimulatorCrystal() {
       camera.updateProjectionMatrix();
     }
     const T = (window.__simTemp ?? 22);
-    /* Cold: monoclinic (distorted), Hot: cubic (perfect) */
-    const fp = clamp((T + 20) / 75, 0, 1);
+    let fpTemp = clamp((T + 20) / 75, 0, 1);
+    /* If user clicked to override, ease over to that target then fade back to temp-driven */
+    let fp = fpTemp;
+    if (phaseOverride !== null) {
+      const dt = (performance.now() - overrideAt) / 1000;
+      const blendBack = clamp((dt - 3.5) / 1.5, 0, 1);   // hold 3.5s then fade
+      fp = lerp(phaseOverride, fpTemp, blendBack);
+      if (blendBack >= 1) phaseOverride = null;
+    }
     const distortAmount = (1 - easeInOutCubic(fp));
     const breathe = Math.sin(t * 0.001) * 0.012;
     atoms.forEach((atom, i) => {
@@ -5165,7 +5309,7 @@ function initSimulatorCrystal() {
 
   const hint = document.createElement('div');
   hint.className = 'scene-3d-hint';
-  hint.textContent = 'DRAG TO ORBIT · NITI LATTICE';
+  hint.innerHTML = 'DRAG · SCROLL · CLICK TO FLIP PHASE';
   host.style.position = 'relative';
   host.appendChild(hint);
 
@@ -6671,27 +6815,32 @@ function initWireDemo() {
   heatLight.position.set(0, -1.5, 0.5);
   scene.add(heatLight);
 
-  /* ─── WIRE — built from a curve, rebuilt each frame ─── */
-  /* Shape A: memorized "U" curve  — control points define an arc */
-  const SHAPE_CURVED = [
-    new THREE.Vector3(-1.4,  0.0, 0),
-    new THREE.Vector3(-1.0, -0.6, 0),
-    new THREE.Vector3(-0.5, -0.9, 0),
-    new THREE.Vector3( 0.0, -1.0, 0),
-    new THREE.Vector3( 0.5, -0.9, 0),
-    new THREE.Vector3( 1.0, -0.6, 0),
-    new THREE.Vector3( 1.4,  0.0, 0),
+  /* ─── WIRE — taut ↔ sagging morph (canonical SMA demo) ─── */
+  /* Shape A: TAUT — memorized austenite. Wire is straight & under tension
+     between the two anchors. Slight upward bow gives a "stretched" look. */
+  const SHAPE_TAUT = [
+    new THREE.Vector3(-1.4,  0.00, 0),
+    new THREE.Vector3(-0.93, 0.02, 0),
+    new THREE.Vector3(-0.47, 0.03, 0),
+    new THREE.Vector3( 0.0,  0.04, 0),
+    new THREE.Vector3( 0.47, 0.03, 0),
+    new THREE.Vector3( 0.93, 0.02, 0),
+    new THREE.Vector3( 1.4,  0.00, 0),
   ];
-  /* Shape B: deformed straight line */
-  const SHAPE_STRAIGHT = [
-    new THREE.Vector3(-1.4, -0.2, 0),
-    new THREE.Vector3(-0.93, -0.2, 0),
-    new THREE.Vector3(-0.47, -0.2, 0),
-    new THREE.Vector3( 0.0, -0.2, 0),
-    new THREE.Vector3( 0.47, -0.2, 0),
-    new THREE.Vector3( 0.93, -0.2, 0),
-    new THREE.Vector3( 1.4, -0.2, 0),
+  /* Shape B: SLACK — deformed martensite. The wire has been stretched
+     mechanically; it sags between the anchors like a clothesline under load. */
+  const SHAPE_SLACK = [
+    new THREE.Vector3(-1.4,  0.00, 0),
+    new THREE.Vector3(-1.0, -0.55, 0),
+    new THREE.Vector3(-0.5, -0.85, 0),
+    new THREE.Vector3( 0.0, -0.95, 0),
+    new THREE.Vector3( 0.5, -0.85, 0),
+    new THREE.Vector3( 1.0, -0.55, 0),
+    new THREE.Vector3( 1.4,  0.00, 0),
   ];
+  /* Legacy aliases kept so any downstream code still resolves */
+  const SHAPE_CURVED   = SHAPE_TAUT;
+  const SHAPE_STRAIGHT = SHAPE_SLACK;
 
   const wireMat = new THREE.MeshPhysicalMaterial({
     color: 0xb8c0cc, metalness: 0.92, roughness: 0.18,
@@ -6701,24 +6850,24 @@ function initWireDemo() {
   /* Pre-compute both target vertex layouts (curved + straight) once.
      TubeGeometry is topology-identical for both since segments/radius match. */
   const TUBE_SEGS = 60, TUBE_RADIAL = 16, TUBE_R = 0.07;
-  const curvedCurve   = new THREE.CatmullRomCurve3(SHAPE_CURVED);
-  const straightCurve = new THREE.CatmullRomCurve3(SHAPE_STRAIGHT);
-  const curvedGeo   = new THREE.TubeGeometry(curvedCurve,   TUBE_SEGS, TUBE_R, TUBE_RADIAL, false);
-  const straightGeo = new THREE.TubeGeometry(straightCurve, TUBE_SEGS, TUBE_R, TUBE_RADIAL, false);
-  const curvedPos   = curvedGeo.attributes.position.array;
-  const straightPos = straightGeo.attributes.position.array;
-  /* Working geometry — we'll lerp positions into this each frame */
-  const wireGeo = curvedGeo.clone();
+  const tautCurve  = new THREE.CatmullRomCurve3(SHAPE_TAUT);
+  const slackCurve = new THREE.CatmullRomCurve3(SHAPE_SLACK);
+  const tautGeo  = new THREE.TubeGeometry(tautCurve,  TUBE_SEGS, TUBE_R, TUBE_RADIAL, false);
+  const slackGeo = new THREE.TubeGeometry(slackCurve, TUBE_SEGS, TUBE_R, TUBE_RADIAL, false);
+  const tautPos  = tautGeo.attributes.position.array;
+  const slackPos = slackGeo.attributes.position.array;
+  /* Working geometry starts TAUT (memorized austenite). */
+  const wireGeo = tautGeo.clone();
   const workPos = wireGeo.attributes.position.array;
   const wireMesh = new THREE.Mesh(wireGeo, wireMat);
   scene.add(wireMesh);
-  /* Dispose the throwaway geometries — we only kept the position arrays */
-  straightGeo.dispose();
+  slackGeo.dispose();
   function setWireBlend(t) {
-    /* t: 0 = curved (memorized), 1 = straight (deformed) */
+    /* t: 0 = TAUT memorized austenite, 1 = SLACK deformed martensite.
+       Heating snaps t back to 0 — the iconic SMA contraction. */
     const n = workPos.length;
     for (let i = 0; i < n; i++) {
-      workPos[i] = curvedPos[i] + (straightPos[i] - curvedPos[i]) * t;
+      workPos[i] = tautPos[i] + (slackPos[i] - tautPos[i]) * t;
     }
     wireGeo.attributes.position.needsUpdate = true;
     wireGeo.computeVertexNormals();
@@ -6793,14 +6942,20 @@ function initWireDemo() {
   floor.position.y = -1.7;
   scene.add(floor);
 
-  /* ─── SEQUENCE ─── */
+  /* ─── SEQUENCE — physically faithful SMA cycle ───
+     1. SHAPE-SET (taut, hot austenite)
+     2. COOLING  (still taut, transitions to martensite)
+     3. DEFORMING (load applied → wire stretches & sags)
+     4. DEFORMED (held under load, cold martensite)
+     5. HEATING  (current pulse → wire contracts back taut — the magic)
+     6. RECOVERED (taut, austenite restored, cooling back to ambient) */
   const PHASES = [
-    { id: 'shapeset',  label: '▸ SHAPE-SET',    start: 0.0, dur: 1.8 },
-    { id: 'deforming', label: '↳ DEFORMING',    start: 1.8, dur: 1.4 },
-    { id: 'deformed',  label: '◂ DEFORMED',     start: 3.2, dur: 0.6 },
-    { id: 'heating',   label: '🔥 HEATING',     start: 3.8, dur: 1.0 },
-    { id: 'recover',   label: '✨ RECOVERING',  start: 4.8, dur: 1.5 },
-    { id: 'recovered', label: '✓ RECOVERED',    start: 6.3, dur: 1.7 },
+    { id: 'shapeset',  label: '▸ SHAPE-SET',    start: 0.0, dur: 1.2 },
+    { id: 'cooling',   label: '❄ COOLING',     start: 1.2, dur: 0.9 },
+    { id: 'deforming', label: '↳ STRETCHING',  start: 2.1, dur: 1.4 },
+    { id: 'deformed',  label: '◂ DEFORMED',    start: 3.5, dur: 0.6 },
+    { id: 'heating',   label: '🔥 HEATING · CONTRACTING', start: 4.1, dur: 1.8 },
+    { id: 'recovered', label: '✓ RECOVERED',   start: 5.9, dur: 2.1 },
   ];
   const LOOP = 8.0;
   const state = { t: 0, mx: 0, my: 0, tmx: 0, tmy: 0 };
@@ -6840,41 +6995,39 @@ function initWireDemo() {
     state.my = lerp(state.my, state.tmy, 0.05);
     const ph = getPhase(state.t);
 
-    /* Shape blend: 0 = curved (memorized), 1 = straight (deformed) */
-    let blend = 0, heat = 0, phaseColor = C.cyanDeep, temp = 22, strain = 0, phaseLabel = 'AUSTENITE';
+    /* Shape blend: 0 = TAUT memorized austenite, 1 = SLACK deformed martensite */
+    let blend = 0, heat = 0, temp = 22, strain = 0, phaseLabel = 'AUSTENITE';
     if (ph.id === 'shapeset') {
       blend = 0; temp = 22; strain = 0; phaseLabel = 'AUSTENITE';
-    } else if (ph.id === 'deforming') {
-      blend = easeInOutCubic(ph.progress);
+    } else if (ph.id === 'cooling') {
+      blend = 0;                                   // stays taut while cooling
       temp = lerp(22, -25, ph.progress);
+      strain = 0;
+      phaseLabel = ph.progress > 0.6 ? 'MARTENSITE' : 'TRANSFORMING';
+    } else if (ph.id === 'deforming') {
+      /* Load applied → wire stretches and sags downward */
+      blend = easeInOutCubic(ph.progress);
+      temp = -25;
       strain = ph.progress * 8;
-      phaseColor = C.cold;
       phaseLabel = 'MARTENSITE';
     } else if (ph.id === 'deformed') {
       blend = 1; temp = -25; strain = 8;
-      phaseColor = C.cold;
       phaseLabel = 'MARTENSITE';
     } else if (ph.id === 'heating') {
-      blend = 1;
-      heat = easeInOutCubic(ph.progress);
+      /* Current pulse heats wire — it CONTRACTS back to taut shape.
+         Heating ramps quickly; contraction follows behind for visual drama. */
+      heat = easeInOutCubic(clamp(ph.progress / 0.55, 0, 1));
+      const contractStart = 0.18;                  // delay so heat-glow appears first
+      const c = clamp((ph.progress - contractStart) / (1 - contractStart), 0, 1);
+      blend = 1 - easeInOutCubic(c);
       temp = lerp(-25, 90, ph.progress);
-      strain = 8;
-      phaseColor = lerp(0.8, 1.0, ph.progress) > 0.5 ? C.ember : C.cold;
-      phaseLabel = ph.progress > 0.7 ? 'TRANSFORMING' : 'MARTENSITE';
-    } else if (ph.id === 'recover') {
-      const e = easeInOutCubic(ph.progress);
-      blend = 1 - e;
-      heat = 1 - ph.progress * 0.5;
-      temp = lerp(90, 75, ph.progress);
-      strain = 8 - e * 8;
-      phaseColor = C.ember;
-      phaseLabel = 'AUSTENITE';
+      strain = 8 - 8 * easeInOutCubic(c);
+      phaseLabel = ph.progress > 0.55 ? 'AUSTENITE' : 'TRANSFORMING';
     } else if (ph.id === 'recovered') {
       blend = 0;
-      heat = (1 - ph.progress) * 0.3;
-      temp = lerp(75, 22, ph.progress);
+      heat = (1 - ph.progress) * 0.4;
+      temp = lerp(90, 22, ph.progress);
       strain = 0;
-      phaseColor = C.cyan;
       phaseLabel = 'AUSTENITE';
     }
 
@@ -6903,9 +7056,9 @@ function initWireDemo() {
     }
     heatLight.intensity = heat * 1.8;
 
-    /* Lattice: positions along current wire curve */
-    const pts = SHAPE_CURVED.map((p, i) => {
-      const sa = SHAPE_STRAIGHT[i];
+    /* Lattice: positions along current wire curve (taut → slack lerp) */
+    const pts = SHAPE_TAUT.map((p, i) => {
+      const sa = SHAPE_SLACK[i];
       return new THREE.Vector3(
         lerp(p.x, sa.x, blend),
         lerp(p.y, sa.y, blend),
@@ -6926,7 +7079,7 @@ function initWireDemo() {
     /* DOM telemetry */
     if (stepEl) {
       stepEl.textContent = ph.label;
-      stepEl.classList.toggle('firing', ph.id === 'heating' || ph.id === 'recover');
+      stepEl.classList.toggle('firing', ph.id === 'heating');
       stepEl.classList.toggle('deployed', ph.id === 'recovered');
     }
     if (tempEl)   tempEl.textContent   = temp.toFixed(0) + '°C';
