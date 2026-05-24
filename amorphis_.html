@@ -260,31 +260,29 @@ nav.solid {
   padding: 3px 10px;
   text-transform: uppercase;
 }
-/* ─── HERO BRAND BLOCK — official Amorphis logo image ─── */
+/* ─── HERO BRAND BLOCK — official Amorphis logo (transparent PNG) ─── */
 .hero-brand {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 28px;
   position: relative;
 }
 .hero-logo-img {
   display: block;
-  width: clamp(260px, 32vw, 420px);
+  width: clamp(280px, 36vw, 520px);
   height: auto;
-  /* Bring the metal to life on a dark background: lift mid-tones, add a soft cyan halo. */
+  /* Subtle depth on the metallic surface — no brightness/contrast hacks */
   filter:
-    drop-shadow(0 4px 14px rgba(0,0,0,0.55))
-    drop-shadow(0 0 36px rgba(122,229,255,0.10))
-    brightness(1.08)
-    contrast(1.05);
+    drop-shadow(0 8px 22px rgba(0,0,0,0.55))
+    drop-shadow(0 0 42px rgba(122,229,255,0.10));
   user-select: none;
   -webkit-user-drag: none;
   opacity: 0;
   transform: translateY(22px) scale(0.96);
-  animation: brandIn 1.2s cubic-bezier(.16,1,.3,1) .15s forwards;
-  /* Slow, almost imperceptible breathing — keeps the chrome catching the eye */
+  animation: brandIn 1.3s cubic-bezier(.16,1,.3,1) .15s forwards;
+  transition: filter .45s ease;
   will-change: transform, filter;
 }
 @keyframes brandIn {
@@ -292,11 +290,8 @@ nav.solid {
 }
 .hero-logo-img:hover {
   filter:
-    drop-shadow(0 6px 18px rgba(0,0,0,0.6))
-    drop-shadow(0 0 48px rgba(122,229,255,0.18))
-    brightness(1.12)
-    contrast(1.08);
-  transition: filter .4s ease;
+    drop-shadow(0 10px 28px rgba(0,0,0,0.65))
+    drop-shadow(0 0 60px rgba(122,229,255,0.22));
 }
 
 /* Cyan rule that draws in below the logo */
@@ -305,10 +300,10 @@ nav.solid {
   width: 0;
   height: 1px;
   background: linear-gradient(90deg, var(--cyan), transparent);
-  animation: hUnderline 1.4s cubic-bezier(.16,1,.3,1) 1.0s forwards;
-  margin-top: 4px;
+  animation: hUnderline 1.4s cubic-bezier(.16,1,.3,1) 1.1s forwards;
+  margin-top: -8px;
 }
-@keyframes hUnderline { to { width: clamp(260px, 32vw, 420px); } }
+@keyframes hUnderline { to { width: clamp(280px, 36vw, 520px); } }
 
 /* Legacy classes — kept disabled so older selectors don't error */
 .hero-logo, .hero-logo .logo-mark, .hero-mark, .hero-wordmark { display: none; }
@@ -1353,19 +1348,16 @@ section { position: relative; z-index: 10; }
 }
 @media (max-width: 700px) { .partner-strip-body { grid-template-columns: 1fr; text-align: center; } }
 
-/* ─── DHRUVA SPACE LOGO BOX — CSS recreation of the official mark ─── */
+/* ─── DHRUVA SPACE LOGO BOX — uses the official PNG provided by the user ─── */
 .dhruva-logo-box {
   width: 100%;
-  max-width: 200px;
-  aspect-ratio: 1 / 1;
+  max-width: 240px;
   background: #000;
-  border-radius: 22px;
+  border-radius: 14px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 22px;
+  padding: 28px 22px;
   margin: 0 auto;
   text-decoration: none;
   box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
@@ -1375,22 +1367,14 @@ section { position: relative; z-index: 10; }
   transform: translateY(-2px);
   box-shadow: 0 14px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(122,229,255,0.25), 0 0 32px rgba(122,229,255,0.12);
 }
-.dhruva-word {
-  font-family: var(--font-display);   /* Space Grotesk — same geometric weight as the official mark */
-  font-weight: 900;
-  font-size: clamp(22px, 3.8vw, 34px);
-  color: #fff;
-  letter-spacing: 0.005em;
-  line-height: 1;
-}
-.dhruva-sub {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(10px, 1.4vw, 13px);
-  color: #fff;
-  letter-spacing: 0.46em;
-  padding-left: 0.46em;                /* compensate for letter-spacing on right edge */
-  line-height: 1;
+.dhruva-logo-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 80px;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .partner-strip-desc {
@@ -3622,6 +3606,7 @@ canvas { outline: none; }
       <ul class="team-creds">
         <li><span class="cred-tick"></span><span class="cred-text"><strong>5+ years</strong> in the Space industry</span></li>
         <li><span class="cred-tick"></span><span class="cred-text">Ex — <strong>Project Lead</strong>, Deployer Satellite Separation Systems</span></li>
+        <li><span class="cred-tick"></span><span class="cred-text"><strong>PhD candidate</strong> in Smart Materials</span></li>
       </ul>
     </div>
   </div>
@@ -3634,8 +3619,7 @@ canvas { outline: none; }
     </div>
     <div class="partner-strip-body">
       <a href="https://dhruvaspace.com" target="_blank" rel="noopener" class="dhruva-logo-box" aria-label="Dhruva Space — Strategic Partner">
-        <span class="dhruva-word">DHRUVA</span>
-        <span class="dhruva-sub">SPACE</span>
+        <img src="dhruva-space-logo.png" alt="Dhruva Space" draggable="false">
       </a>
       <div class="partner-strip-info">
         <p class="partner-strip-desc">India's most credentialed private satellite company. First Indian company to integrate directly onto SpaceX Falcon 9 (August 2025), IN-SPACe authorised, and provider of the ThermoVac &amp; vibration testing infrastructure that qualifies every Amorphis Flight Model.</p>
@@ -6316,8 +6300,9 @@ function initPinPullerDemo() {
   /* Solid backdrop colour driven by the renderer's clearColor — see below */
 
   const camera = new THREE.PerspectiveCamera(38, canvas.clientWidth / canvas.clientHeight, 0.1, 50);
-  camera.position.set(2.6, 1.4, 4.4);
-  camera.lookAt(0, 0, 0);
+  /* Slightly off-axis camera so both plates AND the SMA wire between them are visible */
+  camera.position.set(2.4, 1.1, 4.2);
+  camera.lookAt(0, 0.25, 0);
 
   const renderer = makeRenderer(canvas);
   renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
@@ -6333,143 +6318,160 @@ function initPinPullerDemo() {
   /* Soft hemisphere for omnidirectional fill */
   scene.add(new THREE.HemisphereLight(0x9ab4d6, 0x1a2030, 0.45));
 
-  /* ─── SATELLITE WALL (left side, vertical panel) ─── */
-  const wallGroup = new THREE.Group();
-  scene.add(wallGroup);
-  const wallMat = new THREE.MeshPhysicalMaterial({
-    color: 0x7a8294, metalness: 0.78, roughness: 0.38,
-    clearcoat: 0.45, emissive: new THREE.Color(0x141a26), emissiveIntensity: 0.4,
+  /* ════════ TWO-PLATE HDRM ASSEMBLY ════════
+     Lower plate (fixed) + Upper plate (hinged on -X edge).
+     SMA wire bridges the two plates near the centre and travels with
+     the upper plate when it opens.  This matches the user's brief:
+       "2 plates hinged on one end ... SMA in centre ... on release the
+       SMA must go with the upper plate". */
+
+  const PLATE_W   = 1.8;        // x extent
+  const PLATE_D   = 1.2;        // z extent
+  const PLATE_H   = 0.07;       // thickness
+  const HINGE_X   = -PLATE_W / 2;
+  const GAP       = 0.34;       // closed gap between plates
+  const PLATE_Y_L = 0.0;        // lower plate sits on y=0 plane
+  const PLATE_Y_U = PLATE_Y_L + PLATE_H + GAP;
+
+  /* ─── LOWER PLATE (the spacecraft side — fixed) ─── */
+  const plateLowerMat = new THREE.MeshPhysicalMaterial({
+    color: 0x7a8a9c, metalness: 0.85, roughness: 0.32,
+    clearcoat: 0.5, emissive: new THREE.Color(0x101a28), emissiveIntensity: 0.35,
   });
-  const wall = new THREE.Mesh(new THREE.BoxGeometry(0.18, 2.4, 2.0), wallMat);
-  wall.position.x = -1.4;
-  wallGroup.add(wall);
-  /* Wall surface grid texture (decorative) */
-  for (let y = -0.8; y <= 0.8; y += 0.4) {
-    for (let z = -0.7; z <= 0.7; z += 0.4) {
-      const bolt = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.03, 0.03, 0.04, 6),
-        new THREE.MeshPhysicalMaterial({ color: 0x303840, metalness: 0.9, roughness: 0.6 })
-      );
-      bolt.rotation.z = Math.PI / 2;
-      bolt.position.set(-1.3, y, z);
-      wallGroup.add(bolt);
-    }
-  }
-
-  /* ─── PIN PULLER ACTUATOR (cylinder, right of wall) ─── */
-  const actuatorGroup = new THREE.Group();
-  actuatorGroup.position.x = -0.5;
-  scene.add(actuatorGroup);
-
-  const bodyMat = new THREE.MeshPhysicalMaterial({
-    color: 0xd0d6e0, metalness: 0.88, roughness: 0.18,
-    clearcoat: 0.7, emissive: new THREE.Color(0x182234), emissiveIntensity: 0.35,
+  const lowerPlate = new THREE.Mesh(
+    new THREE.BoxGeometry(PLATE_W, PLATE_H, PLATE_D),
+    plateLowerMat,
+  );
+  lowerPlate.position.set(0, PLATE_Y_L + PLATE_H / 2, 0);
+  scene.add(lowerPlate);
+  /* Decorative bolt pattern on lower plate corners */
+  const boltMat = new THREE.MeshPhysicalMaterial({ color: 0x303840, metalness: 0.9, roughness: 0.55 });
+  [[-PLATE_W/2+0.12,  PLATE_D/2-0.12], [PLATE_W/2-0.12,  PLATE_D/2-0.12],
+   [-PLATE_W/2+0.12, -PLATE_D/2+0.12], [PLATE_W/2-0.12, -PLATE_D/2+0.12]].forEach(([x, z]) => {
+    const bolt = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.04, 10), boltMat);
+    bolt.position.set(x, PLATE_Y_L + PLATE_H + 0.02, z);
+    scene.add(bolt);
   });
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.8, 32), bodyMat);
-  body.rotation.z = Math.PI / 2;
-  actuatorGroup.add(body);
 
-  /* End caps */
-  const capMat = new THREE.MeshPhysicalMaterial({ color: 0x8a929c, metalness: 0.92, roughness: 0.32, emissive: new THREE.Color(0x101822), emissiveIntensity: 0.3 });
-  const capBack = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.28, 0.12, 24), capMat);
-  capBack.rotation.z = Math.PI / 2;
-  capBack.position.x = 0.46;
-  actuatorGroup.add(capBack);
-  const capFront = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.34, 0.10, 24), capMat);
-  capFront.rotation.z = Math.PI / 2;
-  capFront.position.x = -0.45;
-  actuatorGroup.add(capFront);
+  /* ─── HINGE PIVOT — group whose rotation around Z opens the upper plate ───
+     Origin sits AT the hinge axis (x = HINGE_X) so a pure Z-rotation pivots
+     the upper plate cleanly without translation drift. */
+  const hinge = new THREE.Group();
+  hinge.position.set(HINGE_X, PLATE_Y_U + PLATE_H / 2, 0);
+  scene.add(hinge);
 
-  /* Accent ring (status indicator) */
+  /* ─── UPPER PLATE (the payload side — hinged) ─── */
+  const plateUpperMat = new THREE.MeshPhysicalMaterial({
+    color: 0xd0d6e0, metalness: 0.88, roughness: 0.22,
+    clearcoat: 0.65, emissive: new THREE.Color(0x141c2a), emissiveIntensity: 0.32,
+  });
+  const upperPlate = new THREE.Mesh(
+    new THREE.BoxGeometry(PLATE_W, PLATE_H, PLATE_D),
+    plateUpperMat,
+  );
+  /* Offset so its left edge sits ON the hinge axis */
+  upperPlate.position.set(PLATE_W / 2, 0, 0);
+  hinge.add(upperPlate);
+  /* Same bolt pattern on the upper plate (rides with it) */
+  [[-PLATE_W/2+0.12,  PLATE_D/2-0.12], [PLATE_W/2-0.12,  PLATE_D/2-0.12],
+   [-PLATE_W/2+0.12, -PLATE_D/2+0.12], [PLATE_W/2-0.12, -PLATE_D/2+0.12]].forEach(([x, z]) => {
+    const bolt = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.04, 10), boltMat);
+    /* x is relative to upper-plate centre; upper-plate is offset PLATE_W/2 from hinge,
+       so add PLATE_W/2 to express it in hinge-local coords */
+    bolt.position.set(PLATE_W / 2 + x, -PLATE_H / 2 - 0.02, z);
+    hinge.add(bolt);
+  });
+
+  /* ─── HINGE PIN (visible hardware at the pivot) ─── */
+  const hingePinMat = new THREE.MeshPhysicalMaterial({ color: 0x4a525c, metalness: 0.95, roughness: 0.4 });
+  const hingePin = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.07, 0.07, PLATE_D + 0.1, 18),
+    hingePinMat,
+  );
+  hingePin.rotation.x = Math.PI / 2;       // align along Z
+  /* Place it at the hinge axis in WORLD coords (not a child of hinge group) */
+  hingePin.position.set(HINGE_X, PLATE_Y_L + PLATE_H + GAP / 2 + 0.035, 0);
+  scene.add(hingePin);
+  /* Two end caps on the hinge pin so it looks like real hardware */
+  const hingeCap = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.05, 18), hingePinMat);
+  hingeCap.rotation.x = Math.PI / 2;
+  hingeCap.position.set(HINGE_X,  PLATE_Y_L + PLATE_H + GAP / 2 + 0.035,  PLATE_D / 2 + 0.06);
+  scene.add(hingeCap);
+  const hingeCap2 = hingeCap.clone();
+  hingeCap2.position.z = -PLATE_D / 2 - 0.06;
+  scene.add(hingeCap2);
+
+  /* ─── SMA WIRE — sits in the gap between the plates, near centre ───
+     Wire is a child of `hinge` so it travels with the upper plate when
+     the hinge rotates. Length matches the gap so it visually spans the
+     two plates while armed. */
+  const SMA_LEN = GAP + PLATE_H * 0.4;                 // shorter than the prior pin
+  const SMA_R   = 0.045;
+  const smaMat = new THREE.MeshPhysicalMaterial({
+    color: 0xc8ced8, metalness: 0.92, roughness: 0.18,
+    clearcoat: 0.7,
+    emissive: new THREE.Color(C.cyanDeep), emissiveIntensity: 0.35,
+  });
+  const sma = new THREE.Mesh(new THREE.CylinderGeometry(SMA_R, SMA_R, SMA_LEN, 20), smaMat);
+  /* Position: x = PLATE_W/2 (centre of upper plate in hinge-local space),
+     y = -SMA_LEN/2 - PLATE_H/2 (hangs down from upper plate's underside) */
+  const smaLocalX = PLATE_W * 0.55;                    // slightly toward the free end
+  sma.position.set(smaLocalX, -SMA_LEN / 2 - PLATE_H / 2, 0);
+  hinge.add(sma);
+
+  /* Small ferrules at each end of the SMA — the crimps that real Nitinol uses */
+  const ferruleMat = new THREE.MeshPhysicalMaterial({ color: 0x5a626c, metalness: 0.95, roughness: 0.32 });
+  const ferruleTop = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.08, 14), ferruleMat);
+  ferruleTop.position.set(smaLocalX, -PLATE_H / 2 - 0.04, 0);
+  hinge.add(ferruleTop);
+  const ferruleBot = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.08, 14), ferruleMat);
+  ferruleBot.position.set(smaLocalX, -PLATE_H / 2 - SMA_LEN + 0.04, 0);
+  hinge.add(ferruleBot);                              // also a child — moves with upper plate
+
+  /* Status ring around the upper ferrule — pulses with phase */
   const ringMat = new THREE.MeshPhysicalMaterial({
-    color: C.cyan, emissive: new THREE.Color(C.cyan), emissiveIntensity: 0.5,
-    metalness: 0.4, roughness: 0.3,
+    color: C.cyan, emissive: new THREE.Color(C.cyan), emissiveIntensity: 0.6,
+    metalness: 0.5, roughness: 0.28,
   });
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.29, 0.018, 8, 48), ringMat);
-  ring.rotation.y = Math.PI / 2;
-  actuatorGroup.add(ring);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.014, 8, 36), ringMat);
+  ring.position.copy(ferruleTop.position);
+  ring.rotation.x = Math.PI / 2;
+  hinge.add(ring);
 
-  /* ─── THE PIN ─── */
-  const pinMat = new THREE.MeshPhysicalMaterial({
-    color: 0xd8dde4, metalness: 0.95, roughness: 0.15,
-    clearcoat: 0.8,
-  });
-  const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.4, 16), pinMat);
-  pin.rotation.z = Math.PI / 2;
-  pin.position.x = -1.0;  // extended
-  actuatorGroup.add(pin);
+  /* Footprint mark on lower plate where the SMA's bottom ferrule sits when armed */
+  const footMat = new THREE.MeshBasicMaterial({ color: 0x4a525c, transparent: true, opacity: 0.85 });
+  const footMark = new THREE.Mesh(new THREE.RingGeometry(0.08, 0.11, 24), footMat);
+  footMark.rotation.x = -Math.PI / 2;
+  /* World position: same X/Z as the SMA's bottom end (hinge x + smaLocalX, lower plate top) */
+  footMark.position.set(HINGE_X + smaLocalX, PLATE_Y_L + PLATE_H + 0.005, 0);
+  scene.add(footMark);
 
-  /* Pin tip */
-  const pinTip = new THREE.Mesh(
-    new THREE.ConeGeometry(0.045, 0.08, 16),
-    pinMat
-  );
-  pinTip.rotation.z = -Math.PI / 2;
-  pinTip.position.x = -1.74;
-  actuatorGroup.add(pinTip);
-
-  /* ─── PAYLOAD COMPONENT (held against wall) ─── */
-  const payloadGroup = new THREE.Group();
-  payloadGroup.position.x = -1.05;
-  scene.add(payloadGroup);
-  const payloadMat = new THREE.MeshPhysicalMaterial({
-    color: 0xe6b870, metalness: 0.65, roughness: 0.3,
-    clearcoat: 0.55, emissive: new THREE.Color(0x4a2a08), emissiveIntensity: 0.4,
-  });
-  const payload = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.7, 0.7), payloadMat);
-  payloadGroup.add(payload);
-  /* Payload details: antenna + solar fitting */
-  const dishMat = new THREE.MeshPhysicalMaterial({ color: 0x303840, metalness: 0.8, roughness: 0.5 });
-  const dish = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.04, 16), dishMat);
-  dish.rotation.z = Math.PI / 2;
-  dish.position.x = -0.18;
-  payloadGroup.add(dish);
-  const antMast = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.5, 8), pinMat);
-  antMast.rotation.z = Math.PI / 2;
-  antMast.position.x = -0.4;
-  payloadGroup.add(antMast);
-  /* Pin-hole detail (so the pin visually enters the payload) */
-  const hole = new THREE.Mesh(
-    new THREE.CircleGeometry(0.06, 16),
-    new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide })
-  );
-  hole.position.x = 0.161;
-  hole.rotation.y = Math.PI / 2;
-  payloadGroup.add(hole);
-
-  /* ─── HEAT PARTICLES (emerge during firing) ─── */
-  const heatCount = 80;
+  /* ─── HEAT PARTICLES — rise from the SMA centre during firing ─── */
+  const heatCount = 90;
   const heatPos = new Float32Array(heatCount * 3);
   const heatVel = new Float32Array(heatCount * 3);
   for (let i = 0; i < heatCount; i++) {
     heatPos[i*3] = 0; heatPos[i*3+1] = 0; heatPos[i*3+2] = 0;
     const a = Math.random() * Math.PI * 2;
-    heatVel[i*3]   = Math.cos(a) * 0.012;
-    heatVel[i*3+1] = 0.018 + Math.random() * 0.012;
-    heatVel[i*3+2] = Math.sin(a) * 0.012;
+    heatVel[i*3]   = Math.cos(a) * 0.010;
+    heatVel[i*3+1] = 0.020 + Math.random() * 0.014;
+    heatVel[i*3+2] = Math.sin(a) * 0.010;
   }
   const heatGeo = new THREE.BufferGeometry();
   heatGeo.setAttribute('position', new THREE.BufferAttribute(heatPos, 3));
   const heatMat = new THREE.PointsMaterial({
-    color: C.cyanSoft, size: 0.05, transparent: true, opacity: 0,
+    color: C.ember, size: 0.045, transparent: true, opacity: 0,
     blending: THREE.AdditiveBlending, depthWrite: false,
   });
   const heat = new THREE.Points(heatGeo, heatMat);
-  actuatorGroup.add(heat);
+  /* Anchor the emitter at the SMA's midpoint, in hinge-local coords */
+  heat.position.set(smaLocalX, -PLATE_H / 2 - SMA_LEN * 0.5, 0);
+  hinge.add(heat);
 
-  /* ─── FORCE-ARROW (precision overlay) ─── */
-  const arrowGroup = new THREE.Group();
-  scene.add(arrowGroup);
-  const arrowMat = new THREE.LineBasicMaterial({ color: C.cyan, transparent: true, opacity: 0.6 });
-  const arrowGeo = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(-0.6, 0.6, 0),
-    new THREE.Vector3(-1.3, 0.6, 0),
-    new THREE.Vector3(-1.2, 0.65, 0),
-    new THREE.Vector3(-1.3, 0.6, 0),
-    new THREE.Vector3(-1.2, 0.55, 0),
-  ]);
-  const arrow = new THREE.Line(arrowGeo, arrowMat);
-  arrowGroup.add(arrow);
+  /* Glow light at the SMA centre — comes on during heating */
+  const smaLight = new THREE.PointLight(C.ember, 0.0, 4.0, 1.6);
+  smaLight.position.copy(heat.position);
+  hinge.add(smaLight);
 
   /* ─── BLUEPRINT FLOOR — brighter grid + soft halo glow on pin demo ─── */
   const floorMat = new THREE.ShaderMaterial({
@@ -6493,15 +6495,16 @@ function initPinPullerDemo() {
   floor.position.y = -1.3;
   scene.add(floor);
 
-  /* ─── STATE & SEQUENCE ─── */
+  /* ─── STATE & SEQUENCE — two-plate HDRM cycle ─── */
   const PHASES = [
-    { id: 'armed',    label: '▸ ARMED',     start: 0.0,  dur: 2.0 },
-    { id: 'trigger',  label: '⚡ TRIGGER',   start: 2.0,  dur: 0.4 },
-    { id: 'pull',     label: '◂ PULL',      start: 2.4,  dur: 1.4 },
-    { id: 'release',  label: '↑ RELEASE',   start: 3.8,  dur: 2.4 },
-    { id: 'reset',    label: '↻ RESET',     start: 6.2,  dur: 1.8 },
+    { id: 'armed',    label: '▸ ARMED',           start: 0.0, dur: 1.8 },
+    { id: 'trigger',  label: '⚡ TRIGGER',         start: 1.8, dur: 0.5 },
+    { id: 'fire',     label: '🔥 SMA HEATING',    start: 2.3, dur: 1.2 },
+    { id: 'release',  label: '↑ RELEASE',         start: 3.5, dur: 2.4 },
+    { id: 'reset',    label: '↻ RESET',           start: 5.9, dur: 2.1 },
   ];
   const LOOP = 8.0;
+  const MAX_OPEN = 0.95;   // ~ 54° upper plate lift on release
   const state = { t: 0, mx: 0, my: 0, tmx: 0, tmy: 0 };
   const stepEl    = document.getElementById('ddPinStep');
   const forceEl   = document.getElementById('ddPinForce');
@@ -6540,53 +6543,67 @@ function initPinPullerDemo() {
     state.my = lerp(state.my, state.tmy, 0.05);
     const ph = getPhase(state.t);
 
-    /* Pin retraction position (-1.0 = extended into payload, -0.2 = withdrawn into actuator) */
-    let pinX = -1.0, payloadX = -1.05, payloadY = 0, payloadRot = 0, ringGlow = 0.5, ringColor = C.cyan;
+    /* Two-plate state — drive hinge openness + SMA heat / glow */
+    let openAngle = 0;
     let heatA = 0;
+    let smaHeat = 0;                // 0..1 — drives wire colour & emissive
+    let ringGlow = 0.5;
+    let ringColor = C.cyan;
+    let footAlpha = 0.85;           // hide footprint mark once the upper plate has lifted
+
     if (ph.id === 'armed') {
-      pinX = -1.0; payloadX = -1.05; payloadY = 0; payloadRot = 0;
-      ringGlow = 0.4 + Math.sin(state.t * 4) * 0.1;
+      openAngle = 0;
+      smaHeat = 0;
+      ringGlow = 0.45 + Math.sin(state.t * 4) * 0.12;
       ringColor = C.cyan;
     } else if (ph.id === 'trigger') {
-      pinX = -1.0; payloadX = -1.05; payloadY = 0;
-      ringGlow = 1.5 + Math.sin(state.t * 30) * 0.5;
+      openAngle = 0;
+      smaHeat = ph.progress * 0.4;
+      ringGlow = 1.4 + Math.sin(state.t * 28) * 0.5;
       ringColor = C.cyanSoft;
-      heatA = ph.progress;
-    } else if (ph.id === 'pull') {
-      const e = easeInOutCubic(ph.progress);
-      pinX = lerp(-1.0, -0.2, e);
-      payloadX = -1.05;
-      ringGlow = 1.6 - e * 0.6;
+      heatA = ph.progress * 0.6;
+    } else if (ph.id === 'fire') {
+      openAngle = 0;                                       // still closed — SMA building force
+      smaHeat = 0.4 + ph.progress * 0.6;                   // peaks at 1.0
+      ringGlow = 1.8;
       ringColor = C.ember;
-      heatA = 1 - ph.progress * 0.5;
+      heatA = 0.85 + Math.sin(state.t * 24) * 0.1;
     } else if (ph.id === 'release') {
+      /* This is the moment that matters — upper plate opens UP, SMA goes WITH it. */
       const e = easeOutCubic(ph.progress);
-      pinX = -0.2;
-      payloadX = lerp(-1.05, -0.2, e);
-      payloadY = e * 0.3;
-      payloadRot = e * 0.4;
-      ringGlow = 0.8 - e * 0.4;
-      ringColor = C.bronze;
-      heatA = (1 - ph.progress) * 0.4;
+      openAngle = MAX_OPEN * e;
+      smaHeat = 1.0 - ph.progress * 0.4;                  // wire cooling as the lid swings
+      ringGlow = 1.6 - e * 0.8;
+      ringColor = C.ember;
+      heatA = (1 - ph.progress) * 0.7;
+      footAlpha = 0.85 * (1 - e);                          // fade out the bottom-anchor circle
     } else if (ph.id === 'reset') {
       const e = easeInOutCubic(ph.progress);
-      pinX = lerp(-0.2, -1.0, e);
-      payloadX = lerp(-0.2, -1.05, e);
-      payloadY = lerp(0.3, 0, e);
-      payloadRot = lerp(0.4, 0, e);
-      ringGlow = 0.4;
+      openAngle = MAX_OPEN * (1 - e);
+      smaHeat = 0.55 * (1 - ph.progress);                 // wire cools back to base
+      ringGlow = 0.45 + e * 0.1;
       ringColor = C.cyan;
+      footAlpha = 0.85 * e;                                // mark reappears once plates re-close
     }
 
-    pin.position.x = pinX;
-    pinTip.position.x = pinX - 0.74;
-    payloadGroup.position.x = payloadX;
-    payloadGroup.position.y = payloadY;
-    payloadGroup.rotation.z = payloadRot * 0.5;
-    payloadGroup.rotation.y = payloadRot * 0.7;
+    /* Drive the geometry */
+    hinge.rotation.z = openAngle;
+
+    /* SMA wire colour + emissive blend (cyan → ember as it heats) */
+    smaMat.emissive.lerpColors(new THREE.Color(C.cyanDeep), new THREE.Color(C.ember), smaHeat);
+    smaMat.emissiveIntensity = 0.35 + smaHeat * 1.5;
+    smaMat.color.lerpColors(new THREE.Color(0xc8ced8), new THREE.Color(0xffb070), smaHeat * 0.65);
+
+    /* Status ring */
     ringMat.emissiveIntensity = ringGlow;
     ringMat.emissive.set(ringColor);
     ringMat.color.set(ringColor);
+
+    /* Heat-source light at the SMA centre */
+    smaLight.intensity = smaHeat * 1.6;
+
+    /* Footprint mark fades out when upper plate has lifted */
+    footMat.opacity = footAlpha;
 
     /* Heat particles */
     heatMat.opacity = heatA;
@@ -6596,28 +6613,25 @@ function initPinPullerDemo() {
         positions[i*3]   += heatVel[i*3];
         positions[i*3+1] += heatVel[i*3+1];
         positions[i*3+2] += heatVel[i*3+2];
-        /* respawn */
-        if (positions[i*3+1] > 0.4) {
-          positions[i*3] = (Math.random() - 0.5) * 0.1;
+        if (positions[i*3+1] > 0.6) {
+          positions[i*3]   = (Math.random() - 0.5) * 0.08;
           positions[i*3+1] = 0;
-          positions[i*3+2] = (Math.random() - 0.5) * 0.1;
+          positions[i*3+2] = (Math.random() - 0.5) * 0.08;
         }
       }
       heatGeo.attributes.position.needsUpdate = true;
     }
 
-    /* Arrow visibility — only when armed */
-    arrow.material.opacity = (ph.id === 'armed' || ph.id === 'trigger') ? 0.6 : 0.0;
-
     /* DOM telemetry */
     if (stepEl) {
       stepEl.textContent = ph.label;
-      stepEl.classList.toggle('firing', ph.id === 'trigger' || ph.id === 'pull');
+      stepEl.classList.toggle('firing', ph.id === 'trigger' || ph.id === 'fire');
       stepEl.classList.toggle('deployed', ph.id === 'release');
     }
     if (strokeEl) {
-      const strokeMm = (-1.0 - pinX) * (-1) * 7.5;  // map to 0-6mm
-      strokeEl.textContent = clamp(strokeMm, 0, 6).toFixed(1) + ' mm';
+      /* Stroke = lift of the plate's free edge in mm (illustrative scale) */
+      const liftMm = Math.sin(openAngle) * PLATE_W * 1000 * 0.005;
+      strokeEl.textContent = clamp(liftMm, 0, 12).toFixed(1) + ' mm';
     }
     if (forceEl) {
       forceEl.textContent = (ph.id === 'release' || ph.id === 'reset') ? '0 N' : '800 N';
@@ -6625,9 +6639,9 @@ function initPinPullerDemo() {
     if (tEl) tEl.textContent = state.t.toFixed(1) + ' s';
 
     /* Camera parallax */
-    camera.position.x = 2.6 + state.mx * 0.3;
-    camera.position.y = 1.4 - state.my * 0.25;
-    camera.lookAt(0, 0, 0);
+    camera.position.x = 2.4 + state.mx * 0.3;
+    camera.position.y = 1.1 - state.my * 0.25;
+    camera.lookAt(0, 0.25, 0);
 
     renderer.render(scene, camera);
   }
