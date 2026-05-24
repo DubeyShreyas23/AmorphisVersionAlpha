@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://unpkg.com">
-<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Oxanium:wght@200;300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Oxanium:wght@200;300;400;600;700;800&family=Orbitron:wght@500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <!-- Three.js for industry-grade 3D scenes -->
 <script type="importmap">
 {
@@ -260,38 +260,92 @@ nav.solid {
   padding: 3px 10px;
   text-transform: uppercase;
 }
-/* ─── HERO LOGO + DYNAMIC SUBTITLE ──────────────────── */
-.hero-logo {
-  font-family: var(--font-hd);
-  font-size: clamp(64px, 9.2vw, 132px);
-  line-height: 0.92;
-  letter-spacing: 0.08em;
-  margin-bottom: 18px;
-  overflow: hidden;
-  position: relative;
+/* ─── HERO BRAND BLOCK — Möbius mark + Orbitron wordmark ─── */
+.hero-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 22px;
 }
-.hero-logo .logo-mark {
-  display: inline-block;
-  background: linear-gradient(180deg, var(--pure) 0%, var(--silver) 50%, var(--chrome) 100%);
+.hero-mark {
+  width: clamp(80px, 8vw, 120px);
+  height: auto;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.55)) drop-shadow(0 0 22px rgba(122,229,255,0.08));
+  opacity: 0;
+  transform: translateY(20px) scale(0.92);
+  animation: markIn 1.1s cubic-bezier(.16,1,.3,1) .15s forwards;
+}
+@keyframes markIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+.hero-mark .mark-strip {
+  animation: markSpin 22s linear infinite;
+  transform-origin: 100px 100px;
+}
+@keyframes markSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.hero-wordmark {
+  font-family: 'Orbitron', var(--font-display), sans-serif;
+  font-weight: 800;
+  font-size: clamp(46px, 6.6vw, 88px);
+  line-height: 0.95;
+  letter-spacing: 0.16em;
+  /* True chrome — multi-stop vertical gradient + a subtle cyan rim */
+  background:
+    linear-gradient(180deg,
+      #f4f6f9 0%,
+      #c4cad3 28%,
+      #6c727c 50%,
+      #b8bec7 72%,
+      #f4f6f9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  transform: translateY(100%);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)) drop-shadow(0 0 18px rgba(122,229,255,0.10));
+  position: relative;
+  overflow: hidden;
+  padding-right: 0.04em;          /* prevent letter-spacing right-edge clip */
   opacity: 0;
-  animation: lineReveal 1.1s cubic-bezier(.16,1,.3,1) .25s forwards;
-  filter: drop-shadow(0 0 24px rgba(122,229,255,0.15));
+  transform: translateY(28px);
+  animation: lineReveal 1.1s cubic-bezier(.16,1,.3,1) .35s forwards;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
-.hero-logo .logo-mark::after {
-  content: '';
+/* Highlight sweep across the chrome wordmark */
+.hero-wordmark::before {
+  content: 'AMORPHIS';
   position: absolute;
-  left: 0; bottom: -6px;
-  width: 100%; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  opacity: 0;
-  animation: slashIn 1.3s cubic-bezier(.16,1,.3,1) .9s forwards;
-  transform-origin: left;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 250% 100%;
+  background-position: -125% 0;
+  animation: chromeSweep 7s ease-in-out infinite;
+  animation-delay: 1.8s;
+  pointer-events: none;
 }
-@keyframes slashIn { 0% { opacity: 0; transform: scaleX(0); } 60% { opacity: 0.8; } 100% { opacity: 0.6; transform: scaleX(1); } }
+@keyframes chromeSweep {
+  0%   { background-position: -125% 0; opacity: 0.0; }
+  10%  { opacity: 1; }
+  45%  { background-position:  125% 0; opacity: 1; }
+  55%  { opacity: 0.0; }
+  100% { background-position:  125% 0; opacity: 0.0; }
+}
+.hero-wordmark .underline {
+  display: block;
+  width: 0;
+  height: 1px;
+  margin-top: 12px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  animation: slashIn 1.4s cubic-bezier(.16,1,.3,1) 1.1s forwards;
+}
+@keyframes slashIn { to { width: 100%; } }
+
+/* Legacy .hero-logo / .logo-mark — kept so any stragglers don't 404 */
+.hero-logo { display: none; }
+.hero-logo .logo-mark { display: none; }
 
 /* Elegant rotating subtitle — “SHAPE MEMORY ALLOYS” reveals with a sliding mask + letter-spacing breathe */
 .hero-sub {
@@ -1224,6 +1278,63 @@ section { position: relative; z-index: 10; }
   border-bottom: 1px solid var(--border);
 }
 .team-bio { font-size: 13px; font-weight: 300; color: var(--steel); line-height: 1.7; }
+
+/* ─── New founder card structure: avatar + name beside, then creds list ─── */
+.team-card-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+.team-card-head .team-avatar { margin-bottom: 0; flex: 0 0 auto; }
+.team-card-head .team-name   { margin-bottom: 2px; }
+.team-card .team-creds {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.team-card .team-creds li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding-left: 0;
+  position: relative;
+  padding: 10px 14px;
+  background: rgba(122,229,255,0.02);
+  border-left: 2px solid var(--cyan-deep);
+  transition: background .25s ease, border-color .25s ease, transform .25s ease;
+}
+.team-card .team-creds li:hover {
+  background: rgba(122,229,255,0.06);
+  border-left-color: var(--cyan);
+  transform: translateX(4px);
+}
+.cred-tick {
+  width: 8px; height: 8px;
+  margin-top: 6px;
+  background: var(--cyan);
+  flex: 0 0 8px;
+  box-shadow: 0 0 8px rgba(122,229,255,0.6);
+  transform: rotate(45deg);                  /* diamond pip */
+}
+.cred-text {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--silver);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+.cred-text strong {
+  color: var(--white);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
 /* ─── STRATEGIC PARTNER STRIP ──────────────────────── */
 .team-grid.two-col { grid-template-columns: 1fr 1fr; }
 @media (max-width: 900px) { .team-grid.two-col { grid-template-columns: 1fr; } }
@@ -2738,9 +2849,65 @@ canvas { outline: none; }
       <div class="eyebrow-text">Amorphis Pvt Ltd · Hyderabad, India</div>
       <div class="eyebrow-badge">Est. 2025</div>
     </div>
-    <h1 class="hero-logo" aria-label="Amorphis — Shape Memory Alloys">
-      <span class="logo-mark">AMORPHIS</span>
-    </h1>
+    <div class="hero-brand" aria-label="Amorphis">
+      <!-- Möbius A-mark — metallic triangular ribbon -->
+      <svg class="hero-mark" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="mxMetal" x1="15%" y1="0%" x2="85%" y2="100%">
+            <stop offset="0%"   stop-color="#4a5058"/>
+            <stop offset="22%"  stop-color="#b8bec7"/>
+            <stop offset="40%"  stop-color="#7a8088"/>
+            <stop offset="60%"  stop-color="#c8cdd5"/>
+            <stop offset="80%"  stop-color="#5a6068"/>
+            <stop offset="100%" stop-color="#2e3238"/>
+          </linearGradient>
+          <linearGradient id="mxEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="rgba(232,236,240,0.0)"/>
+            <stop offset="50%"  stop-color="rgba(232,236,240,0.85)"/>
+            <stop offset="100%" stop-color="rgba(232,236,240,0.0)"/>
+          </linearGradient>
+          <linearGradient id="mxShade" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"  stop-color="rgba(0,0,0,0.0)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,0.55)"/>
+          </linearGradient>
+        </defs>
+        <g class="mark-strip">
+          <!-- Outer thick triangular ribbon -->
+          <path d="M 100 26 L 174 154 L 26 154 Z"
+                fill="none"
+                stroke="url(#mxMetal)"
+                stroke-width="26"
+                stroke-linejoin="miter"
+                stroke-miterlimit="3"/>
+          <!-- Inner edge (suggests the Möbius twist seam) -->
+          <path d="M 100 60 L 154 142 L 46 142 Z"
+                fill="none"
+                stroke="rgba(20,24,30,0.85)"
+                stroke-width="1.5"
+                stroke-linejoin="miter"/>
+          <!-- Highlight (specular sweep) -->
+          <path d="M 100 26 L 174 154 L 26 154 Z"
+                fill="none"
+                stroke="url(#mxEdge)"
+                stroke-width="3"
+                stroke-linejoin="miter"
+                transform="translate(0 -1)"
+                opacity="0.65"/>
+          <!-- Bottom shadow shading on the ribbon -->
+          <path d="M 100 26 L 174 154 L 26 154 Z"
+                fill="none"
+                stroke="url(#mxShade)"
+                stroke-width="26"
+                stroke-linejoin="miter"
+                opacity="0.35"/>
+          <!-- Corner spec highlights -->
+          <circle cx="100" cy="26"  r="3" fill="rgba(255,255,255,0.85)" opacity="0.7"/>
+          <circle cx="174" cy="154" r="3" fill="rgba(255,255,255,0.55)" opacity="0.5"/>
+          <circle cx="26"  cy="154" r="3" fill="rgba(255,255,255,0.55)" opacity="0.5"/>
+        </g>
+      </svg>
+      <h1 class="hero-wordmark">AMORPHIS<span class="underline" aria-hidden="true"></span></h1>
+    </div>
     <div class="hero-sub">
       <span class="sub-pip" aria-hidden="true"></span>
       <span class="sub-text">Shape Memory Alloys</span>
@@ -3515,16 +3682,31 @@ canvas { outline: none; }
   </div>
   <div class="team-grid two-col">
     <div class="team-card" data-reveal="1">
-      <div class="team-avatar">KS</div>
-      <div class="team-name">KUSHAGRA SINGH</div>
-      <div class="team-role">Co-Founder &amp; CEO</div>
-      <p class="team-bio">Materials engineering background with focus on SMA thermo-mechanical modelling. Personally designed and built the Amorphis HDRM — from Nitinol wire characterisation to housing machining to actuation verification across 20+ logged cycles. Leads all technical development and qualification planning.</p>
+      <div class="team-card-head">
+        <div class="team-avatar">KS</div>
+        <div>
+          <div class="team-name">KUSHAGRA SINGH</div>
+          <div class="team-role">Co-Founder &amp; CEO</div>
+        </div>
+      </div>
+      <ul class="team-creds">
+        <li><span class="cred-tick"></span><span class="cred-text"><strong>3+ years</strong> in the Space industry</span></li>
+        <li><span class="cred-tick"></span><span class="cred-text">Ex — <strong>Space Systems Analyst</strong>, Dhruva Space</span></li>
+        <li><span class="cred-tick"></span><span class="cred-text">Ex — <strong>Business Analyst</strong>, Founder's Office, Cosmoserve Space</span></li>
+      </ul>
     </div>
     <div class="team-card" data-reveal="2">
-      <div class="team-avatar">SJ</div>
-      <div class="team-name">SANKALP JAIN</div>
-      <div class="team-role">Co-Founder &amp; CTO</div>
-      <p class="team-bio">Electronics, control systems, and embedded programming specialist. Built the Arduino-based current controller, Hall-effect sensing loop, and data logging system used for all prototype validation. Leads business development — originated the Dhruva Space strategic partnership.</p>
+      <div class="team-card-head">
+        <div class="team-avatar">SJ</div>
+        <div>
+          <div class="team-name">SANKALP JAIN</div>
+          <div class="team-role">Co-Founder &amp; CTO</div>
+        </div>
+      </div>
+      <ul class="team-creds">
+        <li><span class="cred-tick"></span><span class="cred-text"><strong>5+ years</strong> in the Space industry</span></li>
+        <li><span class="cred-tick"></span><span class="cred-text">Ex — <strong>Project Lead</strong>, Deployer Satellite Separation Systems</span></li>
+      </ul>
     </div>
   </div>
 
@@ -4187,14 +4369,14 @@ function hexToRgb(hex) {
   return isNaN(r) ? '150,150,150' : `${r},${g},${b}`;
 }
 
-/* ─── GLITCH EFFECT — subtle Amorphis logo flicker ─────────────── */
-const logoMark = document.querySelector('.hero-logo .logo-mark');
-if (logoMark) {
+/* ─── GLITCH EFFECT — subtle Amorphis wordmark flicker ───────── */
+const wordmark = document.querySelector('.hero-wordmark');
+if (wordmark) {
   setInterval(() => {
     if (Math.random() > .985) {
-      logoMark.style.textShadow = '1px 0 rgba(122,229,255,.45), -1px 0 rgba(212,155,92,.25)';
-      logoMark.style.transform  = `translate(${(Math.random()-.5)*3}px, 0)`;
-      setTimeout(() => { logoMark.style.textShadow = ''; logoMark.style.transform = ''; }, 70);
+      wordmark.style.filter = 'drop-shadow(2px 0 rgba(122,229,255,.55)) drop-shadow(-2px 0 rgba(255,138,61,.35))';
+      wordmark.style.transform = `translate(${(Math.random()-.5)*3}px, 0)`;
+      setTimeout(() => { wordmark.style.filter = ''; wordmark.style.transform = ''; }, 65);
     }
   }, 300);
 }
@@ -6207,7 +6389,9 @@ function initPinPullerDemo() {
   const stage = document.getElementById('ddPinStage');
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x06080a, 0.06);
+  /* Brighter fog colour + lower density so the actuator stays crisp */
+  scene.fog = new THREE.FogExp2(0x1a2238, 0.022);
+  /* Solid backdrop colour driven by the renderer's clearColor — see below */
 
   const camera = new THREE.PerspectiveCamera(38, canvas.clientWidth / canvas.clientHeight, 0.1, 50);
   camera.position.set(2.6, 1.4, 4.4);
@@ -6215,19 +6399,24 @@ function initPinPullerDemo() {
 
   const renderer = makeRenderer(canvas);
   renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+  /* Give the canvas a soft tinted backdrop so the dark metal pops */
+  renderer.setClearColor(new THREE.Color(0x0e1626), 1.0);
 
-  scene.add(new THREE.AmbientLight(0x232a32, 0.55));
-  const key = new THREE.PointLight(C.cyan, 2.4, 14, 1.5); key.position.set(-2.5, 2, 3); scene.add(key);
-  const fill = new THREE.PointLight(C.bronze, 0.8, 10, 1.5); fill.position.set(2.5, -0.8, 2); scene.add(fill);
-  const rim = new THREE.PointLight(C.cyanSoft, 1.5, 12, 1.5); rim.position.set(0, 1, -3); scene.add(rim);
-  const top = new THREE.DirectionalLight(0xffffff, 0.2); top.position.set(0, 5, 1); scene.add(top);
+  /* Ambient lifted 0.55 → 1.05 and warmed slightly so silhouettes never disappear */
+  scene.add(new THREE.AmbientLight(0x3a4658, 1.05));
+  const key  = new THREE.PointLight(C.cyan,     3.6, 18, 1.4); key.position.set(-3,    2.4,  4);   scene.add(key);
+  const fill = new THREE.PointLight(C.bronze,   1.6, 12, 1.6); fill.position.set(2.8, -0.8,  2.5); scene.add(fill);
+  const rim  = new THREE.PointLight(C.cyanSoft, 2.4, 14, 1.5); rim.position.set(0,    1.8, -3.5);  scene.add(rim);
+  const top  = new THREE.DirectionalLight(0xffffff, 0.55);     top.position.set(0,    6,    2);    scene.add(top);
+  /* Soft hemisphere for omnidirectional fill */
+  scene.add(new THREE.HemisphereLight(0x9ab4d6, 0x1a2030, 0.45));
 
   /* ─── SATELLITE WALL (left side, vertical panel) ─── */
   const wallGroup = new THREE.Group();
   scene.add(wallGroup);
   const wallMat = new THREE.MeshPhysicalMaterial({
-    color: 0x4a525c, metalness: 0.85, roughness: 0.45,
-    clearcoat: 0.3,
+    color: 0x7a8294, metalness: 0.78, roughness: 0.38,
+    clearcoat: 0.45, emissive: new THREE.Color(0x141a26), emissiveIntensity: 0.4,
   });
   const wall = new THREE.Mesh(new THREE.BoxGeometry(0.18, 2.4, 2.0), wallMat);
   wall.position.x = -1.4;
@@ -6251,15 +6440,15 @@ function initPinPullerDemo() {
   scene.add(actuatorGroup);
 
   const bodyMat = new THREE.MeshPhysicalMaterial({
-    color: 0xa8b0bc, metalness: 0.92, roughness: 0.2,
-    clearcoat: 0.6,
+    color: 0xd0d6e0, metalness: 0.88, roughness: 0.18,
+    clearcoat: 0.7, emissive: new THREE.Color(0x182234), emissiveIntensity: 0.35,
   });
   const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.8, 32), bodyMat);
   body.rotation.z = Math.PI / 2;
   actuatorGroup.add(body);
 
   /* End caps */
-  const capMat = new THREE.MeshPhysicalMaterial({ color: 0x5a626c, metalness: 0.95, roughness: 0.38 });
+  const capMat = new THREE.MeshPhysicalMaterial({ color: 0x8a929c, metalness: 0.92, roughness: 0.32, emissive: new THREE.Color(0x101822), emissiveIntensity: 0.3 });
   const capBack = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.28, 0.12, 24), capMat);
   capBack.rotation.z = Math.PI / 2;
   capBack.position.x = 0.46;
@@ -6302,8 +6491,8 @@ function initPinPullerDemo() {
   payloadGroup.position.x = -1.05;
   scene.add(payloadGroup);
   const payloadMat = new THREE.MeshPhysicalMaterial({
-    color: 0xb8985a, metalness: 0.7, roughness: 0.35,
-    clearcoat: 0.5,
+    color: 0xe6b870, metalness: 0.65, roughness: 0.3,
+    clearcoat: 0.55, emissive: new THREE.Color(0x4a2a08), emissiveIntensity: 0.4,
   });
   const payload = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.7, 0.7), payloadMat);
   payloadGroup.add(payload);
@@ -6360,9 +6549,9 @@ function initPinPullerDemo() {
   const arrow = new THREE.Line(arrowGeo, arrowMat);
   arrowGroup.add(arrow);
 
-  /* ─── BLUEPRINT FLOOR ─── */
+  /* ─── BLUEPRINT FLOOR — brighter grid + soft halo glow on pin demo ─── */
   const floorMat = new THREE.ShaderMaterial({
-    uniforms: { uColor: { value: new THREE.Color(C.cyanDeep) } },
+    uniforms: { uColor: { value: new THREE.Color(C.cyan) } },
     transparent: true, depthWrite: false,
     vertexShader: `varying vec2 vUv; varying vec3 vPos;
       void main(){ vUv = uv; vPos = position;
@@ -6372,8 +6561,9 @@ function initPinPullerDemo() {
         vec2 g = abs(fract(vPos.xz * 0.7) - 0.5);
         float line = min(g.x, g.y);
         float a = 1.0 - smoothstep(0.0, 0.025, line);
-        float fade = 1.0 - smoothstep(0.0, 4.0, length(vPos.xz));
-        gl_FragColor = vec4(uColor, a * fade * 0.18);
+        float fade = 1.0 - smoothstep(0.0, 4.5, length(vPos.xz));
+        float halo = exp(-length(vPos.xz) * 0.45) * 0.18;
+        gl_FragColor = vec4(uColor, a * fade * 0.45 + halo);
       }`,
   });
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(12, 12), floorMat);
