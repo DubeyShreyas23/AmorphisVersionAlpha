@@ -174,10 +174,10 @@ def render_slide(milestones, pin_anchors, part_label, date_range, idx_start, out
 
     # Pins
     PIN_R = 0.30
-    STEM_ABOVE = 1.10
-    STEM_BELOW = 0.85
-    PILL_W = 1.30; PILL_H = 0.28
-    TEXT_W = 1.65
+    STEM_ABOVE = 1.15
+    STEM_BELOW = 0.90
+    PILL_W = 1.30; PILL_H = 0.26
+    TEXT_W = 1.75
 
     for j, (px, py, above) in enumerate(pin_anchors):
         col = PINS[j]
@@ -202,15 +202,32 @@ def render_slide(milestones, pin_anchors, part_label, date_range, idx_start, out
                   num, font=pin_num, fill=ROAD_DASH)
 
         # Text card
-        text_right = (px + PIN_R + 0.12 + TEXT_W) <= 13.0
-        if text_right:
-            tx = px + PIN_R + 0.12; align_right = False
-        else:
-            tx = px - PIN_R - 0.12 - TEXT_W; align_right = True
-        ty_pill = stem_y1 - 0.20
+        head_cy = stem_y1
 
-        # Pill
+        # Y: entire block centred on head_cy, clamped to slide bounds
+        BLOCK_H = PILL_H + 0.06 + 0.32 + 0.06 + 0.65
+        ty_pill  = head_cy - BLOCK_H / 2
+        ty_title = ty_pill + PILL_H + 0.06
+        ty_desc  = ty_title + 0.32 + 0.06
+
+        TOP_GUARD = 1.45; BOT_GUARD = 7.35
+        if ty_pill < TOP_GUARD:
+            d = TOP_GUARD - ty_pill
+            ty_pill += d; ty_title += d; ty_desc += d
+        if ty_desc + 0.65 > BOT_GUARD:
+            d = (ty_desc + 0.65) - BOT_GUARD
+            ty_pill -= d; ty_title -= d; ty_desc -= d
+
+        # X: prefer right, flip left near edge
+        text_right = (px + PIN_R + 0.14 + TEXT_W) <= 13.15
+        if text_right:
+            tx = px + PIN_R + 0.14; align_right = False
+        else:
+            tx = px - PIN_R - 0.14 - TEXT_W; align_right = True
+
         pill_x = tx if not align_right else (tx + TEXT_W - PILL_W)
+
+        # Date pill
         draw.rounded_rectangle((i(pill_x), i(ty_pill),
                                 i(pill_x + PILL_W), i(ty_pill + PILL_H)),
                                radius=int(0.05 * SCALE), fill=col)
@@ -225,25 +242,25 @@ def render_slide(milestones, pin_anchors, part_label, date_range, idx_start, out
         bb = draw.textbbox((0, 0), title, font=title_card)
         ttw = bb[2] - bb[0]
         if align_right:
-            draw.text((i(tx + TEXT_W) - ttw, i(ty_pill + 0.34)),
+            draw.text((i(tx + TEXT_W) - ttw, i(ty_title)),
                       title, font=title_card, fill=INK)
         else:
-            draw.text((i(tx), i(ty_pill + 0.34)),
+            draw.text((i(tx), i(ty_title)),
                       title, font=title_card, fill=INK)
 
-        # Description (wrapped)
+        # Description (wrapped, max 3 lines)
         body = milestones[j][2]
         max_w_px = i(TEXT_W) - 4
-        lines = wrap(draw, body, body_card, max_w_px)
-        line_h = body_card.size + 4
+        lines = wrap(draw, body, body_card, max_w_px)[:3]
+        line_h = body_card.size + 3
         for li, line in enumerate(lines):
             if align_right:
                 bb = draw.textbbox((0, 0), line, font=body_card)
                 lw = bb[2] - bb[0]
-                draw.text((i(tx + TEXT_W) - lw - 2, i(ty_pill + 0.70) + li * line_h),
+                draw.text((i(tx + TEXT_W) - lw - 2, i(ty_desc) + li * line_h),
                           line, font=body_card, fill=INK_2)
             else:
-                draw.text((i(tx) + 2, i(ty_pill + 0.70) + li * line_h),
+                draw.text((i(tx) + 2, i(ty_desc) + li * line_h),
                           line, font=body_card, fill=INK_2)
 
     # Footer

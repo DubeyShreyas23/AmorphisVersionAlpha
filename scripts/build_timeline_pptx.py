@@ -255,10 +255,11 @@ def build_slide(slide_milestones, pin_anchors, part_label, date_range, idx_start
 
     # ── Pins ───────────────────────────────────────
     PIN_R = 0.30
-    STEM_ABOVE = 1.10   # stem length for above-road pins
-    STEM_BELOW = 0.85   # shorter below-road stem so cards don't fall off slide
-    PILL_W = 1.30; PILL_H = 0.28
-    TEXT_W = 1.65
+    # Stem lengths: above pins need more room for text growing upward
+    STEM_ABOVE = 1.15
+    STEM_BELOW = 0.90
+    PILL_W = 1.30; PILL_H = 0.26
+    TEXT_W = 1.75   # slightly wider for more comfortable wrapping
 
     for i, (px, py, above) in enumerate(pin_anchors):
         col = PINS[i]
@@ -275,7 +276,7 @@ def build_slide(slide_milestones, pin_anchors, part_label, date_range, idx_start
         head_cy = stem_y1
         add_shadowed_oval(slide, px, head_cy, PIN_R, fill=col)
 
-        # Number inside the head — placed via a clean centred textbox over the circle
+        # Number centred inside pin head
         num_tb = slide.shapes.add_textbox(
             Inches(px - PIN_R), Inches(head_cy - 0.18),
             Inches(PIN_R * 2), Inches(0.36))
@@ -287,17 +288,36 @@ def build_slide(slide_milestones, pin_anchors, part_label, date_range, idx_start
         nr.font.name = "Calibri"; nr.font.size = Pt(15); nr.font.bold = True
         nr.font.color.rgb = ROAD_DASH
 
-        # Text card placement: prefer right of pin, flip if it'd run off-slide
-        text_right = (px + PIN_R + 0.12 + TEXT_W) <= 13.0
-        if text_right:
-            tx = px + PIN_R + 0.12; align = PP_ALIGN.LEFT
-        else:
-            tx = px - PIN_R - 0.12 - TEXT_W; align = PP_ALIGN.RIGHT
+        # ── Text card Y+X placement ────────────────
+        # Text sits BESIDE the pin (horizontal).  The ENTIRE block is
+        # vertically centred on head_cy so it never crosses the road or
+        # runs off the slide edges.
+        # Block order top→bottom: pill → title → description  (total ≈1.35 in)
+        BLOCK_H = PILL_H + 0.06 + 0.32 + 0.06 + 0.65
+        ty_pill  = head_cy - BLOCK_H / 2
+        ty_title = ty_pill + PILL_H + 0.06
+        ty_desc  = ty_title + 0.32 + 0.06
 
-        ty_pill = head_cy - 0.20
+        # Clamp so block never clips slide top (below header) or bottom
+        TOP_GUARD = 1.45
+        BOT_GUARD = 7.35
+        if ty_pill < TOP_GUARD:
+            d = TOP_GUARD - ty_pill
+            ty_pill += d; ty_title += d; ty_desc += d
+        if ty_desc + 0.65 > BOT_GUARD:
+            d = (ty_desc + 0.65) - BOT_GUARD
+            ty_pill -= d; ty_title -= d; ty_desc -= d
+
+        # X: prefer right of pin, flip left only if overflows slide
+        text_right = (px + PIN_R + 0.14 + TEXT_W) <= 13.15
+        if text_right:
+            tx = px + PIN_R + 0.14; align = PP_ALIGN.LEFT
+        else:
+            tx = px - PIN_R - 0.14 - TEXT_W; align = PP_ALIGN.RIGHT
+
+        pill_x = tx if align == PP_ALIGN.LEFT else (tx + TEXT_W - PILL_W)
 
         # Date pill
-        pill_x = tx if align == PP_ALIGN.LEFT else (tx + TEXT_W - PILL_W)
         pill = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
             Inches(pill_x), Inches(ty_pill),
             Inches(PILL_W), Inches(PILL_H))
@@ -313,13 +333,13 @@ def build_slide(slide_milestones, pin_anchors, part_label, date_range, idx_start
         pr.font.color.rgb = ROAD_DASH
         pr._r.get_or_add_rPr().set('spc', '60')
 
-        # Title
-        add_text(slide, tx, ty_pill + 0.34, TEXT_W, 0.34,
+        # Title (bold)
+        add_text(slide, tx, ty_title, TEXT_W, 0.34,
                  slide_milestones[i][1],
-                 font='Calibri', size=14, bold=True, color=INK, align=align)
+                 font='Calibri', size=13, bold=True, color=INK, align=align)
 
-        # Description
-        add_text(slide, tx, ty_pill + 0.70, TEXT_W, 0.95,
+        # Description — height 0.65 (~3 short lines at 9pt)
+        add_text(slide, tx, ty_desc, TEXT_W, 0.65,
                  slide_milestones[i][2],
                  font='Calibri', size=9.5, color=INK_2, align=align)
 
